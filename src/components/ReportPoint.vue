@@ -21,19 +21,17 @@ import { ref } from "vue";
 
 export default {
   name: "ReportPoint",
-  props: {
-
-  },
+  props: ['coordinate'],
   setup() {
-    const coordinate = ref([-0.224, 51.555]);
-    const radius = ref(5);
-    const strokeWidth = ref(10);
+    // const coordinate = ref([-0.224, 51.555]);
+    const radius = ref(3);
+    const strokeWidth = ref(1);
     const strokeColor = ref("red");
     const fillColor = ref("white");
     console.log("SETUP!");
 
     return {
-      coordinate,
+      // coordinate,
       radius,
       strokeWidth,
       strokeColor,

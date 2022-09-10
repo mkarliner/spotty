@@ -4375,6 +4375,11 @@ qs@6.10.3:
   dependencies:
     side-channel "^1.0.4"
 
+qth-locator@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/qth-locator/-/qth-locator-2.1.0.tgz#b346bb727fbee613f5e017b0b920d3a1915a1dbf"
+  integrity sha512-QeF5nF/xkqeWQ363GgdK+qS40II/AYxpTCfrfg/yhOaXVOEdP9JZYBN72utWGyGD3GNr31hg5ivZDELCUUbs5w==
+
 quasar-app-extension-ssg@^4.5.8:
   version "4.5.8"
   resolved "https://registry.yarnpkg.com/quasar-app-extension-ssg/-/quasar-app-extension-ssg-4.5.8.tgz#d5318c141820117caff0af072bc97da4e3e87ae9"
