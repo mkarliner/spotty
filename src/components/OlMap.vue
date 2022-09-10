@@ -3,7 +3,7 @@
     <ol-map
       :loadTilesWhileAnimating="true"
       :loadTilesWhileInteracting="true"
-      style="height: 400px; width: 400px"
+      style="height: 800px; width: 800px"
     >
       <ol-view
         ref="view"
@@ -81,7 +81,7 @@ export default {
 			const rep = JSON.parse(message.toString())
 			console.log(rep, topic)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
-      const point = [receiverLat, receiverLon]
+      const point = [receiverLon, receiverLat]
       console.log(point)
       console.log(this.report_points.length)
       this.report_points.push({
