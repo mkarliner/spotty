@@ -1,6 +1,3 @@
 {
-  "ssg": {
-    "scripts": true,
-    "inlineCriticalCss": true
-  }
+  
 }

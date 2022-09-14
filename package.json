@@ -9,9 +9,7 @@
     "lint": "eslint --ext .js,.vue ./",
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
-    "build:ssg": "quasar ssg generate",
-    "dev:ssg": "quasar ssg dev",
-    "serve:ssg": "quasar ssg serve dist/ssg"
+    "deploy": "push-dir --dir=dist/spa --remote=gh-pages --branch=master"
   },
   "dependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
@@ -34,7 +32,7 @@
     "eslint-plugin-vue": "^9.0.0",
     "mqtt-vue-hook": "^1.2.14",
     "prettier": "^2.5.1",
-    "quasar-app-extension-ssg": "^4.5.8",
+    "push-dir": "^0.4.1",
     "workbox-build": "^6.5.0",
     "workbox-cacheable-response": "^6.5.0",
     "workbox-core": "^6.5.0",
