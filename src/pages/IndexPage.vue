@@ -1,6 +1,5 @@
 <template>
   <q-page class="flex flex-center">
-    <div>foo</div>
     <OlMap></OlMap>
   </q-page>
 </template>

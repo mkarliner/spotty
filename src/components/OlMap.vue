@@ -3,10 +3,16 @@
     <ol-map
       :loadTilesWhileAnimating="true"
       :loadTilesWhileInteracting="true"
-      style="height: 800px; width: 800px"
+      ref="view"
+      style="
+        margin-left: -50%;
+        width: 100%;
+        top: 0;
+        bottom: 0;
+        position: absolute;
+      "
     >
       <ol-view
-        ref="view"
         :center="center"
         :rotation="rotation"
         :zoom="zoom"
@@ -20,7 +26,11 @@
         <ol-source-vector>
           <ol-feature v-for="p in report_points" v-bind:key="p.seqenceNumber">
             <!-- <ReportPoint ></ReportPoint> -->
-            <ReportPoint :coordinate="p.coordinate"></ReportPoint>
+            <ReportPoint
+              @delete="deleteRP"
+              :sequenceNumber="p.sequenceNumber"
+              :coordinate="p.coordinate"
+            ></ReportPoint>
             <!-- <ReportPoint :key="p"></ReportPoint> -->
             <!-- <ol-geom-point :coordinates="coordinate"></ol-geom-point>
             <ol-style>
@@ -40,32 +50,10 @@
 </template>
 
 <script>
-import { useMQTT } from 'mqtt-vue-hook'
-import { locatorToLatLng } from 'qth-locator';
-const mqttHook = useMQTT()
-// var reppoints = [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
-// mqttHook.subscribe(["pskr/filter/+/+/+/+/IO91/#"])
-// mqttHook.registerEvent(
-// 		'pskr/filter/+/+/+/+/IO91/#',
-// 		(topic, message) => {
-// 			const rep = JSON.parse(message.toString())
-// 			// console.log(rep, topic)
-//       const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
-//       const point = [receiverLat, receiverLon]
-//       // console.log(point)
-//       console.log(this.report_points.length)
-//       this.report_points.push({
-//         sequenceNumber: rep.sequenceNumber,
-//         coordinate: point
-//       })
+import { useMQTT } from "mqtt-vue-hook";
+import { locatorToLatLng } from "qth-locator";
+const mqttHook = useMQTT();
 
-			// ElNotification({
-			// 	title: `MQTT TOPIC: ${topic}`,
-			// 	message: mesJson,
-			// 	type: 'info',
-			// })
-		// },
-	// )
 import { ref } from "vue";
 import ReportPoint from "src/components/ReportPoint.vue";
 // import ReportPoint from "./ReportPoint.vue";
@@ -73,26 +61,41 @@ import ReportPoint from "src/components/ReportPoint.vue";
 export default {
   // name: 'OlMap',
   mounted() {
-    console.log("blah")
-    mqttHook.subscribe(["pskr/filter/+/+/+/+/IO91/#"])
-     mqttHook.registerEvent(
-		'pskr/filter/+/+/+/+/IO91/#',
-		(topic, message) => {
-			const rep = JSON.parse(message.toString())
-			console.log(rep, topic)
+    console.log("blah");
+
+    console.log("Mounted");
+    this.$refs.view.updateSize();
+    mqttHook.subscribe(["pskr/filter/+/+/+/+/IO91/#"]);
+    mqttHook.registerEvent("pskr/filter/+/+/+/+/IO91/#", (topic, message) => {
+      const rep = JSON.parse(message.toString());
+      // console.log(rep, topic)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
-      const point = [receiverLon, receiverLat]
-      console.log(point)
-      console.log(this.report_points.length)
-      this.report_points.push({
-        sequenceNumber: rep.sequenceNumber,
-        coordinate: point
-      })
-    } ) },
+      const point = [receiverLon, receiverLat];
+      // console.log(point)
+      // console.log(this.report_points.length)
+      // this.report_points.push({
+      // sequenceNumber: rep.sequenceNumber,
+      // coordinate: point
+      // })
+      console.log("RP:", Object.keys(this.report_points).length);
+      if (this.report_points.hasOwnProperty(rep.seqenceNumber)) {
+        console.log("ALERT, Duplicate");
+      } else {
+        this.report_points[rep.sequenceNumber] = {
+          sequenceNumber: rep.sequenceNumber,
+          coordinate: point,
+        };
+        setTimeout(() => {
+          console.log("bye bye", rep.sequenceNumber);
+          delete this.report_points[rep.sequenceNumber];
+        }, 15000);
+      }
+    });
+  },
   setup() {
     const center = ref([-0.224, 51.555]);
     const projection = ref("EPSG:4326");
-    const zoom = ref(1);
+    const zoom = ref(0);
     const rotation = ref(0);
     const radius = ref(5);
     const strokeWidth = ref(10);
@@ -120,10 +123,16 @@ export default {
     // let report_points = [];
     return {
       // report_points: reppoints,
-      report_points: [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
+      // report_points: [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
+      report_points: {},
     };
   },
+
   methods: {
+    deleteRP(payload) {
+      console.log("Deletion", payload);
+      delete this.report_points[payload];
+    },
     // report_points() {
     //   console.log(".....sss")
     //   return [

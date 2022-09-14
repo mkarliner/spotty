@@ -16,19 +16,20 @@
 <script>
 // import { METHODS } from "http";
 import { ref } from "vue";
+// import {unmount} from 'App'
 
 // import OpenLayersMap from 'vue3-openlayers'
 
 export default {
   name: "ReportPoint",
-  props: ['coordinate'],
+  props: ["coordinate", "sequenceNumber"],
+  emits: ["delete"],
   setup() {
     // const coordinate = ref([-0.224, 51.555]);
     const radius = ref(3);
     const strokeWidth = ref(1);
     const strokeColor = ref("red");
     const fillColor = ref("white");
-    console.log("SETUP!");
 
     return {
       // coordinate,
@@ -38,7 +39,27 @@ export default {
       fillColor,
     };
   },
-  methods: {},
+  data() {
+    return {
+      to: null,
+    };
+  },
+  mounted() {
+    // this.to = setTimeout(() => {
+    //   this.$destroy();
+    //   this.$el.parentNode.removeChild(this.$el);
+    //   console.log("bye bye", this.sequenceNumber);
+    //   this.$emit("delete", this.sequenceNumber);
+    // }, 15000);
+  },
+  methods: {
+    clearTo(){
+    if(this.to) {
+      console.log("Clearing", this.to)
+      clearTimeout(this.to)
+    }
+    }
+  },
   components() {},
 };
 </script>

@@ -4,6 +4,7 @@
 
 <script>
 import { defineComponent } from "vue";
+
 // window.global ||= window;
 // console.log("GLOBAL!");
 
