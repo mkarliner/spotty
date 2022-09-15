@@ -14,12 +14,15 @@
       window.global = window;
     </script>
     <script type="module">
-      console.log(process.env.PROD) {
-         import process from "process";
-      }
+
+      if(process.env.PROD) {
+          import( "process").then()
+          console.log(process.env)
+        }
 
       import EventEmitter from "events";
       import { Buffer } from "buffer";
+
       window.Buffer = Buffer;
       window.process = process;
       window.EventEmitter = EventEmitter;
