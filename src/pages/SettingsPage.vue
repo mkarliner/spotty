@@ -11,10 +11,12 @@
 
 <script>
 // import OlMap from "OlMap";
+
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "SettingsPage",
+  setup() {  },
   data() {
     return {
       broker: "mqtt.pskreporter.info",

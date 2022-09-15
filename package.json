@@ -14,11 +14,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-
     "@quasar/extras": "^1.0.0",
     "element-plus": "^2.2.16",
     "events": "^3.3.0",
     "mqtt": "^4.3.7",
+    "pinia": "^2.0.22",
     "qth-locator": "^2.1.0",
     "quasar": "^2.6.0",
     "url": "^0.11.0",
