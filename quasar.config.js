@@ -70,8 +70,7 @@ module.exports = configure(function (/* ctx */) {
       // distDir
 
       extendViteConf(viteConf, { isClient, isServer }) {},
-      viteVuePluginOptions: {},
-      vitePlugins: [["package-name", {}]],
+      viteVuePluginOptions: {}
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer

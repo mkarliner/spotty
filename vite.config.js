@@ -5,6 +5,8 @@ import rollupNodePolyFill from "rollup-plugin-node-polyfills";
 
 export default {
   resolve: {
+    browser: true,
+    preferBuiltins: true,
     alias: {
       events: "rollup-plugin-node-polyfills/polyfills/events",
       process: "rollup-plugin-node-polyfills/polyfills/process-es6",
@@ -14,10 +16,11 @@ export default {
     },
   },
 
+
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: "globalThis",
+        global: "window",
       },
 
       plugins: [
