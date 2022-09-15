@@ -17,7 +17,8 @@ export default defineComponent({
   name: "SettingsPage",
   data() {
     return {
-      broker: "mqtt.pskreporter.info"
+      broker: "mqtt.pskreporter.info",
+      topic: ""
     }
   }
 });

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="home-container">
     <el-card shadow="always" style="margin-bottom: 30px">
       <div class="emq-title">Configuration</div>
@@ -342,4 +342,4 @@ export default {
     }
   }
 }
-</style>
+</style> -->
