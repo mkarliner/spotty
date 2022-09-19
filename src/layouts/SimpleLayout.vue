@@ -9,14 +9,14 @@
 <template>
 
   <q-layout view="hHh lpR fFf">
-
+    <MQTT></MQTT>
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
           <!-- <q-avatar>
             <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
           </q-avatar> -->
-          Live spots from pskreporter.info
+          Live spots from pskreporter.info {{store.topic}}
         </q-toolbar-title>
       </q-toolbar>
 
@@ -48,3 +48,25 @@
 
   </q-layout>
 </template>
+
+<script>
+import {computed} from "vue";
+import { useSettingsStore} from 'stores/settings'
+import { storeToRefs } from 'pinia';
+import { defineComponent } from "vue";
+import MQTT from "src/components/MQTT.vue";
+
+export default defineComponent({
+  setup() {
+    const store = useSettingsStore()
+    const count = computed(() => store.topic);
+    return {
+      store
+    }
+  },
+  components: {
+    MQTT,
+  },
+})
+</script>
+

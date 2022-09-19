@@ -1,9 +1,10 @@
 <template>
   <ol-feature>
+    <ol-overlay></ol-overlay>
     <ol-geom-point :coordinates="coordinate"></ol-geom-point>
     <ol-style>
       <ol-style-circle :radius="radius">
-        <ol-style-fill :color="fillColor"></ol-style-fill>
+        <ol-style-fill :color="fillColor()"></ol-style-fill>
         <ol-style-stroke
           :color="strokeColor"
           :width="strokeWidth"
@@ -22,21 +23,21 @@ import { ref } from "vue";
 
 export default {
   name: "ReportPoint",
-  props: ["coordinate", "sequenceNumber"],
+  props: ["coordinate", "sequenceNumber", "band"],
   emits: ["delete"],
   setup() {
     // const coordinate = ref([-0.224, 51.555]);
     const radius = ref(3);
     const strokeWidth = ref(1);
-    const strokeColor = ref("red");
-    const fillColor = ref("white");
+    const strokeColor = ref("gray");
+    //const fillColor = ref("white");
 
     return {
       // coordinate,
       radius,
       strokeWidth,
       strokeColor,
-      fillColor,
+      //fillColor,
     };
   },
   data() {
@@ -53,11 +54,27 @@ export default {
     // }, 15000);
   },
   methods: {
-    clearTo(){
-    if(this.to) {
-      console.log("Clearing", this.to)
-      clearTimeout(this.to)
-    }
+    // clearTo(){
+    // if(this.to) {
+    //   console.log("Clearing", this.to)
+    //   clearTimeout(this.to)
+    // }
+    // }
+    fillColor(){
+      // console.log(this.band)
+      switch(this.band) {
+        case "20m":
+          return "orange"
+        case "40m":
+          return "blue"
+        case "17m":
+          return "yellow"
+          case "15m":
+          return "brown"
+        case "10m":
+          return "pink"
+      }
+      return "grey"
     }
   },
   components() {},

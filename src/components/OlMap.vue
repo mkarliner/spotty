@@ -30,6 +30,7 @@
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
               :coordinate="p.coordinate"
+              :band="p.band"
             ></ReportPoint>
             <!-- <ReportPoint :key="p"></ReportPoint> -->
             <!-- <ol-geom-point :coordinates="coordinate"></ol-geom-point>
@@ -52,41 +53,49 @@
 <script>
 import { useMQTT } from "mqtt-vue-hook";
 import { locatorToLatLng } from "qth-locator";
+import { computed } from "vue";
+import { useSettingsStore } from "stores/settings";
+import { storeToRefs } from "pinia";
 const mqttHook = useMQTT();
 
 import { ref } from "vue";
 import ReportPoint from "src/components/ReportPoint.vue";
+import { STATEMENT_TYPES } from "@babel/types";
 // import ReportPoint from "./ReportPoint.vue";
 // import OpenLayersMap from 'vue3-openlayers'
 export default {
   // name: 'OlMap',
   mounted() {
-    console.log("blah");
-
-    console.log("Mounted");
-    this.$refs.view.updateSize();
-    mqttHook.subscribe(["pskr/filter/+/+/+/+/IO91/#"]);
-    mqttHook.registerEvent("pskr/filter/+/+/+/+/IO91/#", (topic, message) => {
+    this.store.$subscribe((mutation, state) => {
+      console.log(
+        "state change ",
+        mutation.events.oldValue,
+        mutation.events.newValue
+      );
+      // mqttHook.unsubscribe([mutation.])
+      // mqttHook.subscribe([this.store.topic]);
+    });
+    // this.$refs.view.updateSize();
+    // mqttHook.subscribe(["pskr/filter/+/+/+/+/IO91/#"]);
+    // mqttHook.registerEvent("pskr/filter/+/+/+/+/IO91/#", (topic, message) => {
+    console.log(this.store.topic);
+    mqttHook.subscribe([this.store.topic]);
+    mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
       // console.log(rep, topic)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
       const point = [receiverLon, receiverLat];
-      // console.log(point)
-      // console.log(this.report_points.length)
-      // this.report_points.push({
-      // sequenceNumber: rep.sequenceNumber,
-      // coordinate: point
-      // })
-      console.log("RP:", Object.keys(this.report_points).length);
+      // console.log("RP:", Object.keys(this.report_points).length);
       if (this.report_points.hasOwnProperty(rep.seqenceNumber)) {
         console.log("ALERT, Duplicate");
       } else {
         this.report_points[rep.sequenceNumber] = {
           sequenceNumber: rep.sequenceNumber,
+          band: rep.band,
           coordinate: point,
         };
         setTimeout(() => {
-          console.log("bye bye", rep.sequenceNumber);
+          // console.log("bye bye", rep.sequenceNumber);
           delete this.report_points[rep.sequenceNumber];
         }, 15000);
       }
@@ -102,11 +111,13 @@ export default {
     const strokeColor = ref("red");
     const fillColor = ref("white");
     const coordinate = ref([-0.224, 51.555]);
-    console.log("Boo!");
+    const store = useSettingsStore();
+    const topic = computed(() => store.topic);
     // var instance = new ReportPoint({});
     // this.$refs.container.addComponent(instance);
 
     return {
+      store,
       center,
       projection,
       zoom,

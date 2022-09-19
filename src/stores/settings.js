@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
-    topic: 0
+
+      topic: "pskr/filter/+/+/+/+/IO91/#"
   }),
 
   getters: {
@@ -12,6 +13,8 @@ export const useSettingsStore = defineStore('settings', {
   },
 
   actions: {
-
+      setTopic(topic) {
+        this.topic = topic
+      }
   }
 })
