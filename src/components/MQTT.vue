@@ -18,16 +18,16 @@ export default {
     const topic = computed(() => store.topic);
     return {
       store,
+      topic
     };
   },
 
   mounted() {
     this.store.$subscribe((mutation, state) => {
-      console.log(
-        "state change ",
-        mutation.events.oldValue,
-        mutation.events.newValue
-      );
+      // console.log(
+      //   "state change ",
+      //   mutation, state
+      // );
       // mqttHook.unsubscribe([mutation.])
       // mqttHook.subscribe([this.store.topic]);
     });
@@ -38,7 +38,7 @@ export default {
     mqttHook.subscribe([this.store.topic]);
     mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
-      // console.log(rep, topic)
+      console.log(rep, topic)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
       const point = [receiverLon, receiverLat];
       // console.log("RP:", Object.keys(this.report_points).length);
@@ -51,11 +51,39 @@ export default {
           coordinate: point,
         };
         setTimeout(() => {
-          console.log("bye bye", rep.sequenceNumber);
+          // console.log("bye bye", rep.sequenceNumber);
           delete this.store.report_points[rep.sequenceNumber];
         }, 15000);
       }
     });
   },
+
+  watch: {
+    topic(newt, oldt) {
+      console.log("TT ", newt, oldt)
+      mqttHook.unSubscribe(oldt)
+      mqttHook.subscribe(newt)
+      mqttHook.registerEvent(this.store.topic, (topic, message) => {
+      const rep = JSON.parse(message.toString());
+      console.log(rep, topic)
+      const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
+      const point = [receiverLon, receiverLat];
+      // console.log("RP:", Object.keys(this.report_points).length);
+      if (this.store.report_points.hasOwnProperty(rep.seqenceNumber)) {
+        console.log("ALERT, Duplicate");
+      } else {
+        this.store.report_points[rep.sequenceNumber] = {
+          sequenceNumber: rep.sequenceNumber,
+          band: rep.band,
+          coordinate: point,
+        };
+        setTimeout(() => {
+          // console.log("bye bye", rep.sequenceNumber);
+          delete this.store.report_points[rep.sequenceNumber];
+        }, 15000);
+      }
+    });
+    }
+  }
 };
 </script>

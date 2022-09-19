@@ -31,13 +31,13 @@ export default defineComponent({
     }
    },
   mounted(){
-    this.store.$subscribe((mutation, state) => {
-      console.log(
-        "state chsssange ",
-        mutation.events.oldValue,
-        mutation.events.newValue
-      );
-    })
+    // this.store.$subscribe((mutation, state) => {
+    //   console.log(
+    //     "state chsssange ",
+    //     mutation.events.oldValue,
+    //     mutation.events.newValue
+    //   );
+    // })
   },
   methods: {
     changeTopic(){
