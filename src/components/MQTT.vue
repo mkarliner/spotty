@@ -16,9 +16,11 @@ export default {
     console.log("MQTT active");
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
+    const report_ttl = computed(() => store.report_ttl);
     return {
       store,
-      topic
+      topic,
+      report_ttl
     };
   },
 
@@ -51,9 +53,9 @@ export default {
           coordinate: point,
         };
         setTimeout(() => {
-          // console.log("bye bye", rep.sequenceNumber);
+          console.log("bye bye", rep.sequenceNumber, this.store.report_ttl);
           delete this.store.report_points[rep.sequenceNumber];
-        }, 15000);
+        }, this.report_ttl * 1000);
       }
     });
   },
@@ -65,7 +67,7 @@ export default {
       mqttHook.subscribe(newt)
       mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
-      console.log(rep, topic)
+      // console.log(rep, topic)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
       const point = [receiverLon, receiverLat];
       // console.log("RP:", Object.keys(this.report_points).length);
@@ -78,9 +80,9 @@ export default {
           coordinate: point,
         };
         setTimeout(() => {
-          // console.log("bye bye", rep.sequenceNumber);
+          console.log("bye bye", rep.sequenceNumber, this.store.report_ttl);
           delete this.store.report_points[rep.sequenceNumber];
-        }, 15000);
+        }, this.store.report_ttl * 1000);
       }
     });
     }

@@ -9,7 +9,16 @@
     </div> -->
     <q-form   @keydown.enter.prevent="changeTopic" >
         <q-input label="Topic" type="text" v-model="topic" />
-      </q-form>
+    </q-form>
+    <div class="q-pa-md">
+    <q-input
+      v-model.number="report_ttl"
+      @change="changeTTL"
+      label="Time to Live"
+      type="number"
+      style="max-width: 200px"
+    />
+  </div>
   </div>
   </q-page>
 </template>
@@ -21,13 +30,16 @@ import { defineComponent } from "vue";
 import {computed} from "vue";
 import { useSettingsStore} from 'stores/settings'
 import { storeToRefs } from 'pinia';
+import { ref } from 'vue'
 
 export default defineComponent({
   name: "SettingsPage",
   setup() {
     const store = useSettingsStore()
+    // report_ttl = computed(() => store.report_ttl);
     return {
-      store
+      store,
+      // report_ttl
     }
    },
   mounted(){
@@ -43,13 +55,21 @@ export default defineComponent({
     changeTopic(){
         console.log("change!")
         this.store.topic = this.topic
+    },
+    changeTTL(){
+        console.log("TTL")
+        this.store.report_ttl = this.report_ttl
     }
+    // ttl(){
+    //   return this.store.report_ttl
+    // }
   },
   data() {
     return {
 
       broker: "mqtt.pskreporter.info",
-      topic: "pskr/filter/+/+/+/+/IO91/#"
+      topic: "pskr/filter/+/+/+/+/IO91/#",
+      report_ttl: "55"
     }
   }
 });

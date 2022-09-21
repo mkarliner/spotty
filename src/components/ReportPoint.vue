@@ -1,6 +1,13 @@
 <template>
   <ol-feature>
-    <ol-overlay></ol-overlay>
+    <!-- <ol-overlay :position="coordinate">
+        <template v-slot="slotProps">
+            <div class="overlay-content">
+                Hello world!<br>
+                Position: {{ slotProps.position }}
+            </div>
+        </template>
+    </ol-overlay> -->
     <ol-geom-point :coordinates="coordinate"></ol-geom-point>
     <ol-style>
       <ol-style-circle :radius="radius">
@@ -89,5 +96,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.overlay-content {
+    background: #efefef;
+    box-shadow: 0 5px 10px rgb(2 2 2 / 20%);
+    padding: 10px 20px;
+    font-size: 14px;
 }
 </style>
