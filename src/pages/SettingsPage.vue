@@ -36,7 +36,7 @@ export default defineComponent({
   name: "SettingsPage",
   setup() {
     const store = useSettingsStore()
-    // report_ttl = computed(() => store.report_ttl);
+    // report_ttl = computed(() => store.report_ttl;
     return {
       store,
       // report_ttl
@@ -69,7 +69,7 @@ export default defineComponent({
 
       broker: "mqtt.pskreporter.info",
       topic: "pskr/filter/+/+/+/+/IO91/#",
-      report_ttl: "55"
+      report_ttl: this.store.report_ttl
     }
   }
 });

@@ -40,7 +40,7 @@ export default {
     mqttHook.subscribe([this.store.topic]);
     mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
-      console.log(rep, topic)
+      // console.log(rep, topic)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
       const point = [receiverLon, receiverLat];
       // console.log("RP:", Object.keys(this.report_points).length);
@@ -53,7 +53,7 @@ export default {
           coordinate: point,
         };
         setTimeout(() => {
-          console.log("bye bye", rep.sequenceNumber, this.store.report_ttl);
+          // console.log("bye bye", rep.sequenceNumber, this.store.report_ttl);
           delete this.store.report_points[rep.sequenceNumber];
         }, this.report_ttl * 1000);
       }

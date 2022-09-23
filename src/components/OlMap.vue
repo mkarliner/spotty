@@ -12,6 +12,16 @@
         position: absolute;
       "
     >
+      <ol-interaction-select @select="featureSelected">
+       <ol-overlay :position="oposition">
+          <template v-slot="slotProps">
+            <div class="overlay-content">
+              Hello world!<br />
+              Position: {{ slotProps.position }}
+            </div>
+          </template>
+        </ol-overlay>>
+      </ol-interaction-select>
       <ol-view
         :center="center"
         :rotation="rotation"
@@ -24,13 +34,18 @@
       </ol-tile-layer>
       <ol-vector-layer>
         <ol-source-vector>
-          <ol-feature v-for="p in this.store.report_points" v-bind:key="p.seqenceNumber">
+          <ol-feature
+            v-for="p in this.store.report_points"
+            v-bind:key="p.seqenceNumber"
+          >
             <!-- <ReportPoint ></ReportPoint> -->
             <ReportPoint
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
               :coordinate="p.coordinate"
               :band="p.band"
+              :callsign="p.callsign"
+              @mapclick="clickty"
             ></ReportPoint>
             <!-- <ReportPoint :key="p"></ReportPoint> -->
             <!-- <ol-geom-point :coordinates="coordinate"></ol-geom-point>
@@ -46,7 +61,9 @@
           </ol-feature>
         </ol-source-vector>
       </ol-vector-layer>
+      <ol-attribution-control></ol-attribution-control>
     </ol-map>
+
   </div>
 </template>
 
@@ -113,6 +130,11 @@ export default {
     const coordinate = ref([-0.224, 51.555]);
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
+    // const featureSelected = (event) => {
+    //   console.log("XX", event.selected[0].values_.geometry.extent_[0]);
+    //   oposition = event.selected[0].values_.geometry.extent_[0]
+
+    // }
     // var instance = new ReportPoint({});
     // this.$refs.container.addComponent(instance);
 
@@ -127,12 +149,14 @@ export default {
       strokeColor,
       fillColor,
       coordinate,
+      // featureSelected,
     };
   },
   data() {
     // let report_points = [{ center: [-0.224, 51.555] }];
     // let report_points = [];
     return {
+      oposition: [0,50],
       // report_points: reppoints,
       // report_points: [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
       report_points: {},
@@ -144,6 +168,17 @@ export default {
       console.log("Deletion", payload);
       delete this.report_points[payload];
     },
+    clickty() {
+      console.log("clicky");
+    },
+    featureSelected(event){
+      console.log("XX", event);
+      this.oposition = event.selected[0].values_.geometry.extent_
+
+    }
+    // featuresSelected(e) {
+    //   console.log("FS", e)
+    // }
     // report_points() {
     //   console.log(".....sss")
     //   return [
