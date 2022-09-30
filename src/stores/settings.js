@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
 
-      topic: "pskr/filter/+/+/+/+/IO91/#",
+      topic: "pskr/filter/+/+/+/+/+/IO91/#",
       report_points: {},
       report_ttl: 60
   }),

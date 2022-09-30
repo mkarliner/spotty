@@ -1,4 +1,5 @@
 <template>
+  <div :data-seqno="sequenceNumber">
   <ol-feature>
     <!-- <ol-overlay :position="coordinate">
         <template v-slot="slotProps">
@@ -23,6 +24,7 @@
       </ol-style-circle>
     </ol-style>
   </ol-feature>
+</div>
 </template>
 
 <script>
@@ -72,6 +74,7 @@ export default {
   },
   data() {
     return {
+      aaa: 123,
       to: null,
     };
   },

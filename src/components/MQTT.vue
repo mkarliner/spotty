@@ -41,15 +41,15 @@ export default {
     mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
       // console.log(rep, topic)
-      const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
+      const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
       const point = [receiverLon, receiverLat];
       // console.log("RP:", Object.keys(this.report_points).length);
-      if (this.store.report_points.hasOwnProperty(rep.seqenceNumber)) {
+      if (this.store.report_points.hasOwnProperty(rep.sq)) {
         console.log("ALERT, Duplicate");
       } else {
-        this.store.report_points[rep.sequenceNumber] = {
-          sequenceNumber: rep.sequenceNumber,
-          band: rep.band,
+        this.store.report_points[rep.sq] = {
+          sequenceNumber: rep.sq,
+          band: rep.b,
           coordinate: point,
         };
         setTimeout(() => {
@@ -67,20 +67,20 @@ export default {
       mqttHook.subscribe(newt)
       mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
-      // console.log(rep, topic)
-      const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
+      console.log(rep, topic)
+      const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
       const point = [receiverLon, receiverLat];
       // console.log("RP:", Object.keys(this.report_points).length);
       if (this.store.report_points.hasOwnProperty(rep.seqenceNumber)) {
         console.log("ALERT, Duplicate");
       } else {
-        this.store.report_points[rep.sequenceNumber] = {
-          sequenceNumber: rep.sequenceNumber,
-          band: rep.band,
+        this.store.report_points[rep.sq] = {
+          sequenceNumber: rep.sq,
+          band: rep.b,
           coordinate: point,
         };
         setTimeout(() => {
-          console.log("bye bye", rep.sequenceNumber, this.store.report_ttl);
+          console.log("bye bye", rep.sq, this.store.report_ttl);
           delete this.store.report_points[rep.sequenceNumber];
         }, this.store.report_ttl * 1000);
       }

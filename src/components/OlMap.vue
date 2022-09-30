@@ -75,7 +75,7 @@ import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
 const mqttHook = useMQTT();
 
-import { ref } from "vue";
+import { ref, provide } from "vue";
 import ReportPoint from "src/components/ReportPoint.vue";
 import { STATEMENT_TYPES } from "@babel/types";
 // import ReportPoint from "./ReportPoint.vue";
@@ -130,6 +130,9 @@ export default {
     const coordinate = ref([-0.224, 51.555]);
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
+
+    provide("bar", "foo")
+
     // const featureSelected = (event) => {
     //   console.log("XX", event.selected[0].values_.geometry.extent_[0]);
     //   oposition = event.selected[0].values_.geometry.extent_[0]
@@ -160,6 +163,7 @@ export default {
       // report_points: reppoints,
       // report_points: [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
       report_points: {},
+
     };
   },
 
@@ -172,7 +176,7 @@ export default {
       console.log("clicky");
     },
     featureSelected(event){
-      console.log("XX", event);
+      console.log("XX", event.selected[0].parent);
       this.oposition = event.selected[0].values_.geometry.extent_
 
     }
