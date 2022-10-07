@@ -1,6 +1,6 @@
 <template>
   <div :data-seqno="sequenceNumber">
-  <ol-feature>
+  <ol-feature ref="sss" :properties="things()">
     <!-- <ol-overlay :position="coordinate">
         <template v-slot="slotProps">
             <div class="overlay-content">
@@ -9,7 +9,7 @@
             </div>
         </template>
     </ol-overlay> -->
-
+    <div :data-seqno="sequenceNumber"  @click="clickty"></div>
     <ol-geom-point :coordinates="coordinate"></ol-geom-point>
     <!-- <ol-interaction-select
       @select="featureSelected">
@@ -30,14 +30,15 @@
 <script>
 // import { METHODS } from "http";
 import { ref, inject } from "vue";
+import olFeatureP from "src/components/OlFeatureP.vue";
 // import {unmount} from 'App'
 
 // import OpenLayersMap from 'vue3-openlayers'
 
 export default {
   name: "ReportPoint",
-  props: ["coordinate", "sequenceNumber", "band", "callsign"],
-  emits: ["delete", "mapclick"],
+  props: ["report", "coordinate", "sequenceNumber", "band", "callsign"],
+  emits: ["delete", "mapclick", "click"],
   setup() {
     // const coordinate = ref([-0.224, 51.555]);
     const radius = ref(10);
@@ -69,8 +70,9 @@ export default {
   },
 
   mounted() {
-    this.selectConditions = inject("ol-selectconditions");
-    this.selectCondition = this.selectConditions.pointerMove;
+    // this.selectConditions = inject("ol-selectconditions");
+    // this.selectCondition = this.selectConditions.pointerMove;
+    // console.log("fff", this)
   },
   data() {
     return {
@@ -93,6 +95,12 @@ export default {
     //   clearTimeout(this.to)
     // }
     // }
+    clickty(e) {
+      console.log("CC ", e)
+    },
+    things() {
+      return {seqno: this.sequenceNumber}
+    },
     fillColor() {
       // console.log(this.band)
       switch (this.band) {
@@ -110,7 +118,9 @@ export default {
       return "grey";
     },
   },
-  components() {},
+  components: {
+    // olFeatureP
+  },
 };
 </script>
 

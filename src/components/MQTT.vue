@@ -48,6 +48,7 @@ export default {
         console.log("ALERT, Duplicate");
       } else {
         this.store.report_points[rep.sq] = {
+          report: rep,
           sequenceNumber: rep.sq,
           band: rep.b,
           coordinate: point,
@@ -75,6 +76,7 @@ export default {
         console.log("ALERT, Duplicate");
       } else {
         this.store.report_points[rep.sq] = {
+          report: rep,
           sequenceNumber: rep.sq,
           band: rep.b,
           coordinate: point,

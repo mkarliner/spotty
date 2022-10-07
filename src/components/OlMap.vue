@@ -4,6 +4,7 @@
       :loadTilesWhileAnimating="true"
       :loadTilesWhileInteracting="true"
       ref="view"
+      @click="clicktt"
       style="
         margin-left: -50%;
         width: 100%;
@@ -13,14 +14,14 @@
       "
     >
       <ol-interaction-select @select="featureSelected">
-       <ol-overlay :position="oposition">
-          <template v-slot="slotProps">
+        <ol-overlay :position="oposition">
+
             <div class="overlay-content">
-              Hello world!<br />
-              Position: {{ slotProps.position }}
+              TX: {{tcall}} RX: {{rcall}}
+              Position: {{ lat }} {{lon}}
             </div>
-          </template>
-        </ol-overlay>>
+
+        </ol-overlay>
       </ol-interaction-select>
       <ol-view
         :center="center"
@@ -39,14 +40,15 @@
             v-bind:key="p.seqenceNumber"
           >
             <!-- <ReportPoint ></ReportPoint> -->
-            <ReportPoint
+            <report-point
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
+              :report="p"
               :coordinate="p.coordinate"
               :band="p.band"
               :callsign="p.callsign"
               @mapclick="clickty"
-            ></ReportPoint>
+            ></report-point>
             <!-- <ReportPoint :key="p"></ReportPoint> -->
             <!-- <ol-geom-point :coordinates="coordinate"></ol-geom-point>
             <ol-style>
@@ -63,7 +65,6 @@
       </ol-vector-layer>
       <ol-attribution-control></ol-attribution-control>
     </ol-map>
-
   </div>
 </template>
 
@@ -128,10 +129,14 @@ export default {
     const strokeColor = ref("red");
     const fillColor = ref("white");
     const coordinate = ref([-0.224, 51.555]);
+    const rcall = "NOONE"
+    const tcall = "DDDD"
+    const grid = "AAAAA"
+
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
 
-    provide("bar", "foo")
+    provide("bar", "foo");
 
     // const featureSelected = (event) => {
     //   console.log("XX", event.selected[0].values_.geometry.extent_[0]);
@@ -152,6 +157,9 @@ export default {
       strokeColor,
       fillColor,
       coordinate,
+      rcall,
+      tcall,
+      grid
       // featureSelected,
     };
   },
@@ -159,27 +167,40 @@ export default {
     // let report_points = [{ center: [-0.224, 51.555] }];
     // let report_points = [];
     return {
-      oposition: [0,50],
+      oposition: [0, 50],
       // report_points: reppoints,
       // report_points: [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
       report_points: {},
-
     };
   },
 
   methods: {
+    clicktt(event) {
+      // this.$refs.view.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
+      //   console.log("FFF ", feature);
+      // });
+      console.log("rrr ", event);
+    },
     deleteRP(payload) {
       console.log("Deletion", payload);
       delete this.report_points[payload];
     },
-    clickty() {
-      console.log("clicky");
-    },
-    featureSelected(event){
-      console.log("XX", event.selected[0].parent);
-      this.oposition = event.selected[0].values_.geometry.extent_
+    clickty(event) {
 
-    }
+    },
+    featureSelected(event) {
+      // console.log("XX", event.selected[0], );
+      // console.log("SSS ", this.store.report_points[event.selected[0].values_.seqno])
+      // console.log("XX", event.target.getFeatures().array_[0], );
+      let rep = this.store.report_points[event.selected[0].values_.seqno].report
+      console.log("eeee ", this.store.report_points[event.selected[0].values_.seqno].report)
+      this.oposition = event.selected[0].values_.geometry.extent_;
+      this.lat = parseFloat(this.oposition[1]).toFixed(4)
+      this.lon = parseFloat(this.oposition[0]).toFixed(4)
+      this.rcall = rep.rc
+      this.tcall = rep.sc
+
+    },
     // featuresSelected(e) {
     //   console.log("FS", e)
     // }
