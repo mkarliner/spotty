@@ -132,6 +132,8 @@ export default {
     const rcall = "NOONE"
     const tcall = "DDDD"
     const grid = "AAAAA"
+    const lat = 0
+    const lon = 50
 
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
@@ -159,7 +161,8 @@ export default {
       coordinate,
       rcall,
       tcall,
-      grid
+      grid,
+      lat, lon
       // featureSelected,
     };
   },
