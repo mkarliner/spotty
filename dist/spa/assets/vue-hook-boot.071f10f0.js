@@ -1,1 +1,0 @@
-import{k as t}from"./index.b51f76ff.js";import{m as r}from"./mqtt-vue-hook.es.8c36a72f.js";var e="wss",a="mqtt.pskreporter.info",s=1886,p=t(async({app:o,router:m})=>{o.use(r,`${e}://${a}:${s}`,{clean:!1,keepalive:60,clientId:`mqtt_client_${Math.random().toString(16).substring(2,10)}`,connectTimeout:4e3})});export{p as default};
