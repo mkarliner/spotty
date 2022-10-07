@@ -68,7 +68,7 @@ export default defineComponent({
     return {
 
       broker: "mqtt.pskreporter.info",
-      topic: "pskr/filter/+/+/+/+/IO91/#",
+      topic: "pskr/filter/v2/+/+/+/+/IO91/#",
       report_ttl: this.store.report_ttl
     }
   }
