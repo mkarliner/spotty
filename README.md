@@ -1,6 +1,5 @@
-# QSSG (quasarssg)
+# Spotty Live Map of Signal Reports from PSKReporter
 
-A Quasar Project
 
 ## Install the dependencies
 ```bash
