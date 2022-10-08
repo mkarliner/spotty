@@ -17,8 +17,14 @@
         <ol-overlay :position="oposition">
 
             <div class="overlay-content">
-              TX: {{tcall}} RX: {{rcall}}
-              Position: {{ lat }} {{lon}}
+              <div>
+                TX: {{tcall}} RX: {{rcall}}
+              </div>
+              <div>
+                LAT: {{ lat }} LON: {{lon}}
+                BAND: {{band}}
+              </div>
+
             </div>
 
         </ol-overlay>
@@ -129,11 +135,12 @@ export default {
     const strokeColor = ref("red");
     const fillColor = ref("white");
     const coordinate = ref([-0.224, 51.555]);
-    const rcall = "NOONE"
-    const tcall = "DDDD"
-    const grid = "AAAAA"
+    const rcall = "-"
+    const tcall = "-"
+    const grid = "-"
     const lat = 0
     const lon = 50
+    const band = "-"
 
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
@@ -162,7 +169,8 @@ export default {
       rcall,
       tcall,
       grid,
-      lat, lon
+      lat, lon,
+      band
       // featureSelected,
     };
   },
@@ -170,7 +178,7 @@ export default {
     // let report_points = [{ center: [-0.224, 51.555] }];
     // let report_points = [];
     return {
-      oposition: [0, 50],
+      oposition: [-1000, -5000],
       // report_points: reppoints,
       // report_points: [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
       report_points: {},
@@ -196,12 +204,13 @@ export default {
       // console.log("SSS ", this.store.report_points[event.selected[0].values_.seqno])
       // console.log("XX", event.target.getFeatures().array_[0], );
       let rep = this.store.report_points[event.selected[0].values_.seqno].report
-      console.log("eeee ", this.store.report_points[event.selected[0].values_.seqno].report)
+      console.log("eeee ", rep)
       this.oposition = event.selected[0].values_.geometry.extent_;
       this.lat = parseFloat(this.oposition[1]).toFixed(4)
       this.lon = parseFloat(this.oposition[0]).toFixed(4)
       this.rcall = rep.rc
       this.tcall = rep.sc
+      this.band = rep.b
 
     },
     // featuresSelected(e) {

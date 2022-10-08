@@ -40,7 +40,7 @@ export default {
     mqttHook.subscribe([this.store.topic]);
     mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
-      console.log(rep, rep.rl)
+      //console.log(rep, rep.rl)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
       const point = [receiverLon, receiverLat];
       // console.log("RP:", Object.keys(this.report_points).length);
@@ -68,7 +68,7 @@ export default {
       mqttHook.subscribe(newt)
       mqttHook.registerEvent(this.store.topic, (topic, message) => {
       const rep = JSON.parse(message.toString());
-      console.log(rep, rep.rl)
+      //console.log(rep, rep.rl)
       const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
       const point = [receiverLon, receiverLat];
       // console.log("RP:", Object.keys(this.report_points).length);
