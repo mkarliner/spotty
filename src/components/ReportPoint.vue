@@ -115,9 +115,13 @@ export default {
         case "17m":
           return "yellow";
         case "15m":
-          return "brown";
+          return "#CAA36A";
+        case "12m":
+          return "#B11A28"
         case "10m":
           return "pink";
+        case "6m":
+          return "#FD001D";
       }
       return "grey";
     },
