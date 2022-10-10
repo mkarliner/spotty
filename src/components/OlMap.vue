@@ -43,7 +43,7 @@
         <ol-source-vector>
           <ol-feature
             v-for="p in this.store.report_points"
-            v-bind:key="p.seqenceNumber"
+            v-bind:key="p.sequenceNumber"
           >
             <!-- <ReportPoint ></ReportPoint> -->
             <report-point

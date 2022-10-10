@@ -29,7 +29,7 @@
 
 <script>
 // import { METHODS } from "http";
-import { ref, inject } from "vue";
+import {watch, ref, inject } from "vue";
 import olFeatureP from "src/components/OlFeatureP.vue";
 // import {unmount} from 'App'
 
@@ -56,6 +56,10 @@ export default {
     const selectInteactionFilter = (feature) => {
       return feature.values_.name != undefined;
     };
+
+    watch(radius, (n,o) => {
+      console.log("CHANGE", n, o)
+    })
 
     return {
       selectConditions,
