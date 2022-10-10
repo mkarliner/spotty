@@ -5,7 +5,8 @@ export const useSettingsStore = defineStore('settings', {
 
       topic: "pskr/filter/v2/+/+/+/+/IO91/#",
       report_points: {},
-      report_ttl: 60
+      report_ttl: 60,
+      callsign: "G8LKD"
   }),
 
   getters: {

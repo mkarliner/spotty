@@ -108,10 +108,12 @@ export default {
     fillColor() {
       // console.log(this.band)
       switch (this.band) {
-        case "20m":
-          return "orange";
         case "40m":
           return "blue";
+        case "30m":
+          return "green";
+        case "20m":
+          return "orange";
         case "17m":
           return "yellow";
         case "15m":

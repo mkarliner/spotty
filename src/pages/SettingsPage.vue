@@ -3,21 +3,28 @@
     <div class="q-pa-md">
     <div class="q-gutter-md" style="max-width: 300px">
       <q-input v-model="broker" label="Broker"/>
-    </div>
-    <!-- <div class="q-gutter-md" style="max-width: 500px">
-      <q-input v-model="topic" label="Topic"/>
-    </div> -->
-    <q-form   @keydown.enter.prevent="changeTopic" >
+
+      <q-form   @keydown.enter.prevent="changeCallsign" >
+        <q-input label="Callsign" type="text" v-model="callsign" />
+    </q-form>
+
+      <q-form   @keydown.enter.prevent="changeTopic" >
         <q-input label="Topic" type="text" v-model="topic" />
     </q-form>
-    <div class="q-pa-md">
-    <q-input
+      <q-input
       v-model.number="report_ttl"
       @change="changeTTL"
       label="Time to Live"
       type="number"
       style="max-width: 200px"
     />
+    </div>
+    <!-- <div class="q-gutter-md" style="max-width: 500px">
+      <q-input v-model="topic" label="Topic"/>
+    </div> -->
+
+    <div class="q-pa-md">
+
   </div>
   </div>
   </q-page>
@@ -56,6 +63,9 @@ export default defineComponent({
         console.log("change!")
         this.store.topic = this.topic
     },
+    changeCallsign(){
+
+    },
     changeTTL(){
         console.log("TTL")
         this.store.report_ttl = this.report_ttl
@@ -68,6 +78,7 @@ export default defineComponent({
     return {
 
       broker: "mqtt.pskreporter.info",
+      callsign: this.store.callsign,
       topic: "pskr/filter/v2/+/+/+/+/IO91/#",
       report_ttl: this.store.report_ttl
     }
