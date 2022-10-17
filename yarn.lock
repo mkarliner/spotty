@@ -5089,6 +5089,11 @@ vue-router@^4.0.0:
   dependencies:
     "@vue/devtools-api" "^6.1.4"
 
+vue-screen-size@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/vue-screen-size/-/vue-screen-size-2.0.4.tgz#ff92820bb911ce2128550ec3bb694b6b7a422557"
+  integrity sha512-WIFhyDpUqdcl0lPbd0ehhXI3qznMNxikkoH1VZL06fwYWNPEGMOiVmW8zOmzmApS/mo5ZmEuZLiLNvGXAINXxw==
+
 vue3-openlayers@^0.1.70:
   version "0.1.70"
   resolved "https://registry.yarnpkg.com/vue3-openlayers/-/vue3-openlayers-0.1.70.tgz#146d82ca38736c33dbdf998019c2193eb87b3eee"

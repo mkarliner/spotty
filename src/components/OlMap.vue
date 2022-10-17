@@ -4,7 +4,6 @@
       :loadTilesWhileAnimating="true"
       :loadTilesWhileInteracting="true"
       ref="view"
-      @click="clicktt"
       style="
         margin-left: -50%;
         width: 100%;
@@ -34,6 +33,7 @@
         :rotation="rotation"
         :zoom="zoom"
         :projection="projection"
+        showFullExtent=true
       />
 
       <ol-tile-layer>
@@ -77,25 +77,27 @@
 <script>
 import { useMQTT } from "mqtt-vue-hook";
 import { locatorToLatLng } from "qth-locator";
-import { computed } from "vue";
+import {  computed } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
 const mqttHook = useMQTT();
 
 import { ref, provide } from "vue";
 import ReportPoint from "src/components/ReportPoint.vue";
+import VueScreenSizeMixin from 'vue-screen-size'
 import { STATEMENT_TYPES } from "@babel/types";
 // import ReportPoint from "./ReportPoint.vue";
 // import OpenLayersMap from 'vue3-openlayers'
 export default {
   // name: 'OlMap',
+  mixins: [VueScreenSizeMixin],
   mounted() {
 
   },
   setup() {
     const center = ref([-0.224, 51.555]);
     const projection = ref("EPSG:4326");
-    const zoom = ref(0);
+    const zoom = ref(1);
     const rotation = ref(0);
     const radius = ref(5);
     const strokeWidth = ref(10);
@@ -112,16 +114,6 @@ export default {
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
     console.log("Map active")
-
-    provide("bar", "foo");
-
-    // const featureSelected = (event) => {
-    //   console.log("XX", event.selected[0].values_.geometry.extent_[0]);
-    //   oposition = event.selected[0].values_.geometry.extent_[0]
-
-    // }
-    // var instance = new ReportPoint({});
-    // this.$refs.container.addComponent(instance);
 
     return {
       store,
@@ -206,4 +198,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+
+
 </style>
