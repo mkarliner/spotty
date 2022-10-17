@@ -16,10 +16,10 @@
       <q-input v-model="broker" label="Broker"/>
 
       <q-form   @keydown.enter.prevent="changeCallsign" >
-        <q-input label="Callsign" type="text" v-model="callsign" />
+        <q-input label="Callsign" type="text" mask="NNNNNNNN" v-model="callsign" />
     </q-form>
     <q-form   @keydown.enter.prevent="changeGrid" >
-        <q-input label="Grid" type="text" v-model="grid" />
+        <q-input label="Grid" type="text" mask="NNNN" v-model="grid" />
     </q-form>
 
       <q-form   @keydown.enter.prevent="changeTopic" >
