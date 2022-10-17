@@ -46,6 +46,7 @@ export default {
             sequenceNumber: rep.sq,
             band: rep.b,
             coordinate: point,
+            countryName: codeToCountryName(iso1A2Code(point))
           };
           console.log("Country:", iso1A2Code(point), codeToCountryName(iso1A2Code(point)))
           setTimeout(() => {
