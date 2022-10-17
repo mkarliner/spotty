@@ -88,7 +88,7 @@ export default defineComponent({
       if(this.mode == 'grid') {
         this.store.topic = `pskr/filter/v2/+/+/+/+/${this.store.grid}/#`
       } else {
-        this.store.topic = `pskr/filter/v2/+/+/+/+/${this.store.callsign}/#`
+        this.store.topic = `pskr/filter/v2/+/+/${this.store.callsign}#`
       }
       console.log("Mode change", this.mode, this.store.topic)
     },

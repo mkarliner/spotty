@@ -11,7 +11,7 @@
               :band="p.band"
               :callsign="p.callsign"
             >
-            <td  :style="bcolor(p.band)">{{p.band}}</td>
+            <td :style="bcolor(p.band)">{{p.band}}</td>
             <td>{{p.report.rc}}</td>
             <td>{{p.report.rl}}</td>
             <td>{{p.report.sc}}</td>
@@ -84,3 +84,5 @@ export default {
   }
 }
 </script>
+
+

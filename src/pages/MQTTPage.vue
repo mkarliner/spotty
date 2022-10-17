@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <q-page class="flex flex-center">
     <div>foo</div>
     <MQTT></MQTT>
@@ -15,4 +15,4 @@ export default defineComponent({
   name: "MQTTPage",
   components: { MQTT },
 });
-</script>
+</script> -->
