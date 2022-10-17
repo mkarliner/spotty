@@ -90,40 +90,7 @@ import { STATEMENT_TYPES } from "@babel/types";
 export default {
   // name: 'OlMap',
   mounted() {
-    // this.store.$subscribe((mutation, state) => {
-    //   console.log(
-    //     "state change ",
-    //     mutation.events.oldValue,
-    //     mutation.events.newValue
-    //   );
-    //   // mqttHook.unsubscribe([mutation.])
-    //   // mqttHook.subscribe([this.store.topic]);
-    // });
-    // // this.$refs.view.updateSize();
-    // // mqttHook.subscribe(["pskr/filter/+/+/+/+/IO91/#"]);
-    // // mqttHook.registerEvent("pskr/filter/+/+/+/+/IO91/#", (topic, message) => {
-    // console.log(this.store.topic);
-    // mqttHook.subscribe([this.store.topic]);
-    // mqttHook.registerEvent(this.store.topic, (topic, message) => {
-    //   const rep = JSON.parse(message.toString());
-    //   // console.log(rep, topic)
-    //   const [receiverLat, receiverLon] = locatorToLatLng(rep.receiverLocator);
-    //   const point = [receiverLon, receiverLat];
-    //   // console.log("RP:", Object.keys(this.report_points).length);
-    //   if (this.report_points.hasOwnProperty(rep.seqenceNumber)) {
-    //     console.log("ALERT, Duplicate");
-    //   } else {
-    //     this.report_points[rep.sequenceNumber] = {
-    //       sequenceNumber: rep.sequenceNumber,
-    //       band: rep.band,
-    //       coordinate: point,
-    //     };
-    //     setTimeout(() => {
-    //       // console.log("bye bye", rep.sequenceNumber);
-    //       delete this.report_points[rep.sequenceNumber];
-    //     }, 15000);
-    //   }
-    // });
+
   },
   setup() {
     const center = ref([-0.224, 51.555]);
@@ -144,6 +111,7 @@ export default {
 
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
+    console.log("Map active")
 
     provide("bar", "foo");
 

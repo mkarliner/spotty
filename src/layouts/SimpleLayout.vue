@@ -23,6 +23,7 @@
       <q-tabs align="left">
         <q-route-tab to="/settings" label="Settings" />
         <q-route-tab to="/map" label="Map" />
+        <q-route-tab to="/log" label="Log" />
       </q-tabs>
     </q-header>
 

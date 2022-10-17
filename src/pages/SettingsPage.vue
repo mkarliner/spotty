@@ -2,10 +2,24 @@
   <q-page class="flex flex-center">
     <div class="q-pa-md">
     <div class="q-gutter-md" style="max-width: 300px">
+      <q-btn-toggle
+        v-model="mode"
+        @click="changeMode"
+        push
+        glossy
+        toggle-color="primary"
+        :options="[
+          {label: 'Callsign', value: 'callsign'},
+          {label: 'Grid', value: 'grid'},
+        ]"
+      />
       <q-input v-model="broker" label="Broker"/>
 
       <q-form   @keydown.enter.prevent="changeCallsign" >
         <q-input label="Callsign" type="text" v-model="callsign" />
+    </q-form>
+    <q-form   @keydown.enter.prevent="changeGrid" >
+        <q-input label="Grid" type="text" v-model="grid" />
     </q-form>
 
       <q-form   @keydown.enter.prevent="changeTopic" >
@@ -43,9 +57,10 @@ export default defineComponent({
   name: "SettingsPage",
   setup() {
     const store = useSettingsStore()
+    const mode = ref(null)
     // report_ttl = computed(() => store.report_ttl;
     return {
-      store,
+      store
       // report_ttl
     }
    },
@@ -66,6 +81,17 @@ export default defineComponent({
     changeCallsign(){
 
     },
+    changeGrid() {
+
+    },
+    changeMode(){
+      if(this.mode == 'grid') {
+        this.store.topic = `pskr/filter/v2/+/+/+/+/${this.store.grid}/#`
+      } else {
+        this.store.topic = `pskr/filter/v2/+/+/+/+/${this.store.callsign}/#`
+      }
+      console.log("Mode change", this.mode, this.store.topic)
+    },
     changeTTL(){
         console.log("TTL")
         this.store.report_ttl = this.report_ttl
@@ -80,7 +106,9 @@ export default defineComponent({
       broker: "mqtt.pskreporter.info",
       callsign: this.store.callsign,
       topic: "pskr/filter/v2/+/+/+/+/IO91/#",
-      report_ttl: this.store.report_ttl
+      report_ttl: this.store.report_ttl,
+      mode: "callsign",
+      grid: this.store.grid
     }
   }
 });
