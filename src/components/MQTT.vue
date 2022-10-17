@@ -37,8 +37,8 @@ export default {
         //console.log(rep, rep.rl)
         const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
         const point = [receiverLon, receiverLat];
-        // console.log("RP:", Object.keys(this.report_points).length);
-        if (this.store.report_points.hasOwnProperty(rep.seqenceNumber)) {
+        console.log("RP:", Object.keys(this.store.report_points).length);
+        if (this.store.report_points.hasOwnProperty(rep.sq)) {
           console.log("ALERT, Duplicate");
         } else {
           this.store.report_points[rep.sq] = {
@@ -50,8 +50,8 @@ export default {
           };
           console.log("Country:", iso1A2Code(point), codeToCountryName(iso1A2Code(point)))
           setTimeout(() => {
-            //console.log("bye bye", rep.sq, this.store.report_ttl);
-            delete this.store.report_points[rep.sequenceNumber];
+            console.log("bye bye", rep.sq, this.store.report_ttl);
+            delete this.store.report_points[rep.sq];
           }, this.store.report_ttl * 1000);
         }
       });
