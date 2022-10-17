@@ -8,13 +8,21 @@ import { locatorToLatLng } from "qth-locator";
 import { computed } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
+import { iso1A2Code } from '@ideditor/country-coder'
+import { useCountryNames } from './CountryNames'
 const mqttHook = useMQTT();
+
+
+
 
 export default {
   // name: 'ComponentName',
   setup() {
     console.log("MQTT active");
+
     const store = useSettingsStore();
+    const { codeToCountryName } = useCountryNames()
+    console.log("CCC ",codeToCountryName)
     const topic = computed(() => store.topic);
     const report_ttl = computed(() => store.report_ttl);
     function changeSubscriptions(newt, oldt) {
@@ -39,6 +47,7 @@ export default {
             band: rep.b,
             coordinate: point,
           };
+          console.log("Country:", iso1A2Code(point), codeToCountryName(iso1A2Code(point)))
           setTimeout(() => {
             //console.log("bye bye", rep.sq, this.store.report_ttl);
             delete this.store.report_points[rep.sequenceNumber];
@@ -48,6 +57,7 @@ export default {
     }
 
     return {
+      codeToCountryName,
       changeSubscriptions,
       store,
       topic,

@@ -14,6 +14,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ideditor/country-coder": "^5.0.4",
     "@quasar/extras": "^1.0.0",
     "element-plus": "^2.2.16",
     "events": "^3.3.0",
