@@ -33,7 +33,7 @@
         :rotation="rotation"
         :zoom="zoom"
         :projection="projection"
-        showFullExtent=true
+        showFullExtent
       />
 
       <ol-tile-layer>
