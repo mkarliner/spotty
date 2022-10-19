@@ -13,14 +13,14 @@
       "
     >
       <ol-interaction-select @select="featureSelected">
-        <ol-overlay :position="oposition">
+        <ol-overlay :position="oposition" :style="overlaydisplay()">>
 
             <div class="overlay-content">
               <div>
                 TX: {{tcall}} RX: {{rcall}}
               </div>
               <div>
-                LAT: {{ lat }} LON: {{lon}}
+                RX GRID: {{ rgrid }}
                 BAND: {{band}}
               </div>
 
@@ -53,7 +53,6 @@
               :coordinate="p.coordinate"
               :band="p.band"
               :callsign="p.callsign"
-              @mapclick="clickty"
             ></report-point>
             <!-- <ReportPoint :key="p"></ReportPoint> -->
             <!-- <ol-geom-point :coordinates="coordinate"></ol-geom-point>
@@ -106,7 +105,8 @@ export default {
     const coordinate = ref([-0.224, 51.555]);
     const rcall = "-"
     const tcall = "-"
-    const grid = "-"
+    const rgrid = "-"
+    const sgrid ="-"
     const lat = 0
     const lon = 50
     const band = "-"
@@ -128,7 +128,8 @@ export default {
       coordinate,
       rcall,
       tcall,
-      grid,
+      rgrid,
+      sgrid,
       lat, lon,
       band
       // featureSelected,
@@ -146,19 +147,16 @@ export default {
   },
 
   methods: {
-    clicktt(event) {
-      // this.$refs.view.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
-      //   console.log("FFF ", feature);
-      // });
-      console.log("rrr ", event);
-    },
+
     deleteRP(payload) {
       console.log("Deletion", payload);
       delete this.report_points[payload];
     },
-    clickty(event) {
 
+    overlaydisplay() {
+        return {display: "block"}
     },
+
     featureSelected(event) {
       // console.log("XX", event.selected[0], );
       // console.log("SSS ", this.store.report_points[event.selected[0].values_.seqno])
@@ -171,6 +169,8 @@ export default {
       this.rcall = rep.rc
       this.tcall = rep.sc
       this.band = rep.b
+      this.rgrid = rep.rl
+      this.sgrid = rep.sl
 
     },
     // featuresSelected(e) {

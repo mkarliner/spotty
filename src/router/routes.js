@@ -23,6 +23,12 @@ const routes = [
     children: [{ path: "", component: () => import("pages/LogPage.vue") }],
   },
 
+  {
+    path: "/help",
+    component: () => import("layouts/SimpleLayout.vue"),
+    children: [{ path: "", component: () => import("pages/HelpPage.vue") }],
+  },
+
   // {
     // path: "/",
     // component: () => import("layouts/SimpleLayout.vue"),

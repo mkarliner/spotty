@@ -48,7 +48,7 @@ export default {
             coordinate: point,
             countryName: codeToCountryName(iso1A2Code(point))
           };
-          console.log("Country:", iso1A2Code(point), codeToCountryName(iso1A2Code(point)))
+          //console.log("Country:", iso1A2Code(point), codeToCountryName(iso1A2Code(point)))
           setTimeout(() => {
             //console.log("bye bye", rep.sq, this.store.report_ttl);
             delete this.store.report_points[rep.sq];
