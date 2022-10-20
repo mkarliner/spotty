@@ -7,7 +7,8 @@ export const useSettingsStore = defineStore('settings', {
       report_points: {},
       report_ttl: 60,
       callsign: "G8LKD",
-      grid: "IO91"
+      grid: "IO91",
+      mode: "grid"
   }),
 
   getters: {

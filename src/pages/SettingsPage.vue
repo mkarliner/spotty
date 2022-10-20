@@ -3,7 +3,7 @@
     <div class="q-pa-md">
     <div class="q-gutter-md" style="max-width: 300px">
       <q-btn-toggle
-        v-model="mode"
+        v-model="this.store.mode"
         @click="changeMode"
         push
         glossy
@@ -19,10 +19,7 @@
         <q-input label="Callsign" type="text" mask="NNNNNNNN" v-model="callsign" />
     </q-form>
     <q-form   @keydown.enter.prevent="changeGrid" >
-        <q-input label="Grid" type="text" mask="NNN
-
-
-        N" v-model="grid" />
+        <q-input label="Grid" type="text" mask="NNNN" v-model="grid" />
     </q-form>
 
       <q-form   @keydown.enter.prevent="changeTopic" >
@@ -60,7 +57,7 @@ export default defineComponent({
   name: "SettingsPage",
   setup() {
     const store = useSettingsStore()
-    const mode = ref(null)
+    //const mode = ref("grid")
     // report_ttl = computed(() => store.report_ttl;
     return {
       store
@@ -88,7 +85,7 @@ export default defineComponent({
 
     },
     changeMode(){
-      if(this.mode == 'grid') {
+      if(this.store.mode == 'grid') {
         this.store.topic = `pskr/filter/v2/+/+/+/+/${this.store.grid}/#`
       } else {
         this.store.topic = `pskr/filter/v2/+/+/${this.store.callsign}/#`
@@ -110,7 +107,7 @@ export default defineComponent({
       callsign: this.store.callsign,
       topic: "pskr/filter/v2/+/+/+/+/IO91/#",
       report_ttl: this.store.report_ttl,
-      mode: "callsign",
+      //mode: "callsign",
       grid: this.store.grid
     }
   }
