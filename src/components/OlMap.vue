@@ -49,10 +49,11 @@
             <report-point
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
-              :report="p"
+              :report="p.report"
               :coordinate="p.coordinate"
               :band="p.band"
-              :callsign="p.callsign"
+              :callsign="p.report.sc"
+              :owncallsign = "this.store.callsign"
             ></report-point>
             <!-- <ReportPoint :key="p"></ReportPoint> -->
             <!-- <ol-geom-point :coordinates="coordinate"></ol-geom-point>

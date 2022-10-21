@@ -29,7 +29,7 @@
 
 <script>
 // import { METHODS } from "http";
-import {watch, ref, inject } from "vue";
+import {watch, ref, inject, computed } from "vue";
 import olFeatureP from "src/components/OlFeatureP.vue";
 // import {unmount} from 'App'
 
@@ -37,11 +37,20 @@ import olFeatureP from "src/components/OlFeatureP.vue";
 
 export default {
   name: "ReportPoint",
-  props: ["report", "coordinate", "sequenceNumber", "band", "callsign"],
+  props: ["report", "coordinate", "sequenceNumber", "band", "callsign", "owncallsign"],
   emits: ["delete", "mapclick", "click"],
-  setup() {
+  setup(props) {
     // const coordinate = ref([-0.224, 51.555]);
-    const radius = ref(10);
+    //const radius = ref(10);
+    const radius = computed(() => {
+      //console.log(props.callsign,props.owncallsign)
+      if(props.callsign == props.owncallsign) {
+        return 12
+      } else {
+        return 8
+      }
+
+    })
     const strokeWidth = ref(1);
     const strokeColor = ref("gray");
     //const fillColor = ref("white");

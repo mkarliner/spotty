@@ -16,7 +16,7 @@
       <q-input v-model="broker" label="Broker"/>
 
       <q-form   @keydown.enter.prevent="changeCallsign" >
-        <q-input label="Callsign" type="text" mask="NNNNNNNN" v-model="callsign" />
+        <q-input label="Callsign" type="text" mask="NNNNNNNN" v-model="this.store.callsign" />
     </q-form>
     <q-form   @keydown.enter.prevent="changeGrid" >
         <q-input label="Grid" type="text" mask="NNNN" v-model="grid" />
@@ -79,10 +79,10 @@ export default defineComponent({
         this.store.topic = this.topic
     },
     changeCallsign(){
-
+      this.store.callsign = this.callsign
     },
     changeGrid() {
-
+      this.store.grid = this.grid
     },
     changeMode(){
       if(this.store.mode == 'grid') {

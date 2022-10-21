@@ -1,4 +1,4 @@
-<template lang="">
+<!-- <template lang="">
   <slot>
 
   </slot>
@@ -81,4 +81,4 @@
 
   <style lang="">
 
-  </style>
+  </style> -->
