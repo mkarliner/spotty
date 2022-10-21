@@ -96,7 +96,7 @@ export default {
   },
   setup() {
     const center = ref([-0.224, 51.555]);
-    const projection = ref("EPSG:4326");
+    const projection = ref("EPSG:3857");
     const zoom = ref(1);
     const rotation = ref(0);
     const radius = ref(5);
