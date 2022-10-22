@@ -13,10 +13,7 @@
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
-          <!-- <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-          </q-avatar> -->
-          Live spots from pskreporter.info {{store.topic}}
+          Live spots from pskreporter.info Monitoring: {{store.mode}} {{store.mode == 'callsign' ? store.callsign : store.grid}}
         </q-toolbar-title>
       </q-toolbar>
 
