@@ -13,7 +13,7 @@
       "
     >
       <ol-interaction-select @select="featureSelected">
-        <ol-overlay :position="oposition" :style="overlaydisplay()">>
+        <ol-overlay :position="oposition" :style="overlaydisplay">
 
             <div class="overlay-content">
               <div>
@@ -39,13 +39,11 @@
       <ol-tile-layer>
         <ol-source-osm />
       </ol-tile-layer>
-      <ol-vector-layer>
+      <ol-vector-layer zIndex=0>
         <ol-source-vector>
           <ol-feature
             v-for="p in this.store.report_points"
-            v-bind:key="p.sequenceNumber"
-          >
-            <!-- <ReportPoint ></ReportPoint> -->
+            v-bind:key="p.sequenceNumber">
             <report-point
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
@@ -55,20 +53,11 @@
               :callsign="p.report.sc"
               :owncallsign = "this.store.callsign"
             ></report-point>
-            <!-- <ReportPoint :key="p"></ReportPoint> -->
-            <!-- <ol-geom-point :coordinates="coordinate"></ol-geom-point>
-            <ol-style>
-              <ol-style-circle :radius="radius">
-                <ol-style-fill :color="fillColor"></ol-style-fill>
-                <ol-style-stroke
-                  :color="strokeColor"
-                  :width="strokeWidth"
-                ></ol-style-stroke>
-              </ol-style-circle>
-            </ol-style> -->
           </ol-feature>
         </ol-source-vector>
       </ol-vector-layer>
+
+
       <ol-attribution-control></ol-attribution-control>
     </ol-map>
   </div>
@@ -96,7 +85,8 @@ export default {
   },
   setup() {
     const center = ref([-0.224, 51.555]);
-    const projection = ref("EPSG:3857");
+    const overlaydisplay = ref("none")
+    const projection = ref("EPSG:4326");
     const zoom = ref(1);
     const rotation = ref(0);
     const radius = ref(5);
@@ -132,7 +122,8 @@ export default {
       rgrid,
       sgrid,
       lat, lon,
-      band
+      band,
+      overlaydisplay
       // featureSelected,
     };
   },
@@ -154,11 +145,16 @@ export default {
       delete this.report_points[payload];
     },
 
-    overlaydisplay() {
-        return {display: "block"}
-    },
+    // overlaydisplay() {
+    //     return {display: "block"}
+    // },
 
     featureSelected(event) {
+      if(this.overlaydisplay == "none") {
+        this.overlaydisplay = "block"
+      } else {
+        this.overlaydisplay = "none"
+      }
       // console.log("XX", event.selected[0], );
       // console.log("SSS ", this.store.report_points[event.selected[0].values_.seqno])
       // console.log("XX", event.target.getFeatures().array_[0], );

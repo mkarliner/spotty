@@ -28,7 +28,7 @@ export default {
     function changeSubscriptions(newt, oldt) {
       console.log("TT ", newt, oldt);
       if(oldt) {
-        mqttHook.unSubscribe("#");
+        mqttHook.unSubscribe(oldt);
       }
 
       mqttHook.subscribe(newt);

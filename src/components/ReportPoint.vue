@@ -15,13 +15,17 @@
       @select="featureSelected">
   </ol-interaction-select> -->
     <ol-style>
-      <ol-style-circle :radius="radius">
+      <ol-style-icon v-if="owncall" :src="markerIcon" :color="fillColor()" :scale="0.05"></ol-style-icon>
+      <ol-style-circle v-else :radius="radius" >
         <ol-style-fill :color="fillColor()"></ol-style-fill>
         <ol-style-stroke
           :color="strokeColor"
           :width="strokeWidth"
         ></ol-style-stroke>
       </ol-style-circle>
+      <!-- <ol-style-text text="o" font="20px icons" ></ol-style-text> -->
+
+
     </ol-style>
   </ol-feature>
 </div>
@@ -30,7 +34,9 @@
 <script>
 // import { METHODS } from "http";
 import {watch, ref, inject, computed } from "vue";
-import olFeatureP from "src/components/OlFeatureP.vue";
+
+import markerIcon from '/src/assets/marker.png'
+// import olFeatureP from "src/components/OlFeatureP.vue";
 // import {unmount} from 'App'
 
 // import OpenLayersMap from 'vue3-openlayers'
@@ -51,6 +57,17 @@ export default {
       }
 
     })
+
+    const owncall = computed(() => {
+      //console.log(props.callsign,props.owncallsign)
+      if(props.callsign == props.owncallsign) {
+        return true
+      } else {
+        return false
+      }
+
+    })
+
     const strokeWidth = ref(1);
     const strokeColor = ref("gray");
     //const fillColor = ref("white");
@@ -71,11 +88,15 @@ export default {
     })
 
     return {
+      markerIcon,
+
+
       selectConditions,
       selectCondition,
       featureSelected,
       selectInteactionFilter, // coordinate,
       radius,
+      owncall,
       strokeWidth,
       strokeColor,
       //fillColor,
