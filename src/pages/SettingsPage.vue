@@ -1,46 +1,51 @@
 <template>
   <q-page class="flex flex-center">
     <div class="q-pa-md">
-    <div class="q-gutter-md" style="max-width: 300px">
-      <q-btn-toggle
-        v-model="this.store.mode"
-        @click="changeMode"
-        push
-        glossy
-        toggle-color="primary"
-        :options="[
-          {label: 'Callsign', value: 'callsign'},
-          {label: 'Grid', value: 'grid'},
-        ]"
-      />
-      <q-input v-model="broker" label="Broker"/>
+      <q-form @submit.prevent="onSubmit" class="q-gutter-md">
+        <q-btn-toggle
+          v-model="mode"
+          push
+          glossy
+          toggle-color="primary"
+          :options="[
+            { label: 'Callsign', value: 'store.callsign' },
+            { label: 'Grid', value: 'store.grid' },
+          ]"
+        />
+        <!-- <q-input v-model="broker" label="Broker" /> -->
 
-      <q-form   @keydown.enter.prevent="changeCallsign" >
-        <q-input label="Callsign" type="text" mask="NNNNNNNN" v-model="this.store.callsign" />
-    </q-form>
-    <q-form   @keydown.enter.prevent="changeGrid" >
-        <q-input label="Grid" type="text" mask="NNNN" v-model="grid" />
-    </q-form>
+        <q-input
+          label="Callsign"
+          type="text"
+          mask="NNNNNNNN"
+          :model-value="store.callsign"
+          @input="event => {callsign = event.target.value; console.log('ddd')}"
+          @update:modelValue = " e => callsign=e"
+        />
+        <q-input
+          label="Grid"
+          type="text"
+          mask="AA##"
+          :model-value="store.grid"
+          @update:modelValue = " e => grid=e"
+          />
+        {{ store.grid }}
 
-      <q-form   @keydown.enter.prevent="changeTopic" >
-        <q-input label="Topic" type="text" v-model="topic" />
-    </q-form>
-      <q-input
-      v-model.number="report_ttl"
-      @change="changeTTL"
-      label="Time to Live"
-      type="number"
-      style="max-width: 200px"
-    />
+        <!-- <q-form @keydown.enter.prevent="changeTopic">
+          <q-input label="Topic" type="text" v-model="topic" />
+        </q-form> -->
+        <q-input
+          v-model.number="store.ttl"
+          label="Time to Live"
+          type="number"
+          style="max-width: 200px"
+        />
+        <div>
+          <q-btn label="OK" type="submit" color="primary" />
+        </div>
+      </q-form>
+      <div class="q-pa-md"></div>
     </div>
-    <!-- <div class="q-gutter-md" style="max-width: 500px">
-      <q-input v-model="topic" label="Topic"/>
-    </div> -->
-
-    <div class="q-pa-md">
-
-  </div>
-  </div>
   </q-page>
 </template>
 
@@ -48,23 +53,43 @@
 // import OlMap from "OlMap";
 
 import { defineComponent } from "vue";
-import {computed} from "vue";
-import { useSettingsStore} from 'stores/settings'
-import { storeToRefs } from 'pinia';
-import { ref } from 'vue'
+import { computed } from "vue";
+import { useSettingsStore } from "stores/settings";
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
 export default defineComponent({
   name: "SettingsPage",
   setup() {
-    const store = useSettingsStore()
-    //const mode = ref("grid")
+    const store = useSettingsStore();
+    const {gridw, callsignw} = storeToRefs(useSettingsStore)
+    const callsign = ref(store.callsign)
+    const grid = ref(store.grid);
+    // const ttl = 60
+    const mode = "callsign";
     // report_ttl = computed(() => store.report_ttl;
     return {
-      store
+      store,
+      callsign,
+      callsignw,
+      gridw,
+      grid,
+      // ttl,
+      mode,
+      onSubmit,
       // report_ttl
+    };
+
+    function onSubmit(e) {
+
+      store.grid = "afa"
+      store.grid = grid.value;
+      store.callsign = callsign.value;
+      console.log("SUBMITTED", e, callsign.value, grid.value, store.grid);
+      // store.topic = [111];
     }
-   },
-  mounted(){
+  },
+  mounted() {
     // this.store.$subscribe((mutation, state) => {
     //   console.log(
     //     "state chsssange ",
@@ -74,42 +99,48 @@ export default defineComponent({
     // })
   },
   methods: {
-    changeTopic(){
-        console.log("change!")
-        this.store.topic = this.topic
-    },
-    changeCallsign(){
-      this.store.callsign = this.callsign
-    },
-    changeGrid() {
-      this.store.grid = this.grid
-    },
-    changeMode(){
-      if(this.store.mode == 'grid') {
-        this.store.topic = `pskr/filter/v2/+/+/+/+/${this.store.grid}/#`
-      } else {
-        this.store.topic = `pskr/filter/v2/+/+/${this.store.callsign}/#`
-      }
-      console.log("Mode change", this.mode, this.store.topic)
-    },
-    changeTTL(){
-        console.log("TTL")
-        this.store.report_ttl = this.report_ttl
-    }
+    // onSubmit() {
+    //   console.log("SUBMITTED")
+    //   this.store.grid = grid
+    // },
+    // changeTopic() {
+    //   console.log("change!");
+    //   this.store.topic = this.topic;
+    // },
+    // changeCallsign() {
+    //   this.store.callsign = this.callsign;
+    // },
+    // changeGrid() {
+    //   this.store.grid = this.grid;
+    // },
+    // changeMode() {
+    //   if (this.store.mode == "grid") {
+    //     this.store.topic = `pskr/filter/v2/+/+/+/+/${this.store.grid}/#`;
+    //   } else {
+    //     this.store.topic = `pskr/filter/v2/+/+/${this.store.callsign}/#`;
+    //   }
+    //   console.log("Mode change", this.mode, this.store.topic);
+    // },
+    // changeTTL() {
+    //   console.log("TTL");
+    //   this.store.report_ttl = this.report_ttl;
+    // },
     // ttl(){
     //   return this.store.report_ttl
     // }
+    fooo (ss) {
+      console.log(ss)
+    }
   },
   data() {
     return {
-
-      broker: "mqtt.pskreporter.info",
-      callsign: this.store.callsign,
-      topic: "pskr/filter/v2/+/+/+/+/IO91/#",
-      report_ttl: this.store.report_ttl,
-      //mode: "callsign",
-      grid: this.store.grid
-    }
-  }
+      // broker: "mqtt.pskreporter.info",
+      // callsign: this.store.callsign,
+      // topic: "pskr/filter/v2/+/+/+/+/IO91/#",
+      // report_ttl: this.store.report_ttl,
+      // //mode: "callsign",
+      // grid: this.store.grid,
+    };
+  },
 });
 </script>

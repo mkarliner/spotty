@@ -3,11 +3,11 @@ import { defineStore } from 'pinia'
 export const useSettingsStore = defineStore('settings', {
   state: () => ({
 
-      topic: "pskr/filter/v2/+/+/+/+/IO91/#",
+      topic: "adfsf",
       report_points: {},
       report_ttl: 60,
-      callsign: "G8LKD",
-      grid: "IO91",
+      callsign: "MY8CALL",
+      grid: "AA91",
       mode: "grid"
   }),
 
@@ -23,6 +23,11 @@ export const useSettingsStore = defineStore('settings', {
   },
 
   actions: {
+      setGrid(grid) {
+        this.grid = grid
+
+      },
+
       setTopic(topic) {
         this.topic = topic
       }

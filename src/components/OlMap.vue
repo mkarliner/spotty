@@ -39,7 +39,7 @@
       <ol-tile-layer>
         <ol-source-osm />
       </ol-tile-layer>
-      <ol-vector-layer zIndex=0>
+      <ol-vector-layer >
         <ol-source-vector>
           <ol-feature
             v-for="p in this.store.report_points"
@@ -48,7 +48,9 @@
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
               :report="p.report"
-              :coordinate="p.coordinate"
+              :topic="p.topic"
+              :rx_coordinate="p.rx_coordinate"
+              :tx_coordinate="p.tx_coordinate"
               :band="p.band"
               :callsign="p.report.sc"
               :owncallsign = "this.store.callsign"
@@ -104,6 +106,8 @@ export default {
 
     const store = useSettingsStore();
     const topic = computed(() => store.topic);
+
+
     console.log("Map active")
 
     return {
