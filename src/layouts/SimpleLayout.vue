@@ -13,7 +13,7 @@
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title>
-          Live spots from pskreporter.info Monitoring: {{store.mode}} {{store.mode == 'callsign' ? store.callsign : store.grid}}
+          Live spots from pskreporter.info Monitoring: Callsign: {{ store.callsign }} Grid: {{store.grid}}
         </q-toolbar-title>
       </q-toolbar>
 

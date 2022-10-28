@@ -15,9 +15,9 @@
       @select="featureSelected">
   </ol-interaction-select> -->
     <ol-style>
-      <ol-style-icon v-if="owncall" :src="markerIcon" :color="fillColor()" :scale="0.05"></ol-style-icon>
+      <ol-style-icon v-if="owncall" :src="markerIcon" :color="fillColor" :scale="0.05"></ol-style-icon>
       <ol-style-circle v-else :radius="radius" >
-        <ol-style-fill :color="fillColor()"></ol-style-fill>
+        <ol-style-fill :color="fillColor"></ol-style-fill>
         <ol-style-stroke
           :color="strokeColor"
           :width="strokeWidth"
@@ -67,13 +67,36 @@ export default {
     })
 
     const owncall = computed(() => {
-      //console.log(props.callsign,props.owncallsign)
+      // console.log(props.callsign,props.owncallsign)
       if(props.callsign == props.owncallsign) {
         return true
       } else {
         return false
       }
 
+    })
+
+    const  fillColor = computed(() => {
+      // console.log(this.band)
+      switch (props.band) {
+        case "40m":
+          return "blue";
+        case "30m":
+          return "green";
+        case "20m":
+          return "orange";
+        case "17m":
+          return "yellow";
+        case "15m":
+          return "#CAA36A";
+        case "12m":
+          return "#B11A28"
+        case "10m":
+          return "pink";
+        case "6m":
+          return "#FD001D";
+      }
+      return "grey";
     })
 
     const strokeWidth = ref(1);
@@ -98,13 +121,13 @@ export default {
     onMounted(() => {
     // this.selectConditions = inject("ol-selectconditions");
     // this.selectCondition = this.selectConditions.pointerMove;
-    // console.log("fff", this)
-    //console.log("PROPS ", props)
+    //console.log("fff", this.band)
+    // console.log("PROPS ", props)
   })
 
     return {
       markerIcon,
-
+      fillColor,
       coordinate,
       selectConditions,
       selectCondition,
@@ -140,35 +163,10 @@ export default {
     //   clearTimeout(this.to)
     // }
     // }
-    clickty(e) {
-      console.log("CC ", e)
-    },
-    things() {
+     things() {
       return {seqno: this.sequenceNumber}
     },
-    fillColor() {
-      // console.log(this.band)
-      switch (this.band) {
-        case "40m":
-          return "blue";
-        case "30m":
-          return "green";
-        case "20m":
-          return "orange";
-        case "17m":
-          return "yellow";
-        case "15m":
-          return "#CAA36A";
-        case "12m":
-          return "#B11A28"
-        case "10m":
-          return "pink";
-        case "6m":
-          return "#FD001D";
-      }
-      return "grey";
-    },
-  },
+     },
   components: {
     // olFeatureP
   },

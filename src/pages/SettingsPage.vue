@@ -29,13 +29,12 @@
           :model-value="store.grid"
           @update:modelValue = " e => grid=e"
           />
-        {{ store.grid }}
 
         <!-- <q-form @keydown.enter.prevent="changeTopic">
           <q-input label="Topic" type="text" v-model="topic" />
         </q-form> -->
         <q-input
-          v-model.number="store.ttl"
+          v-model.number="store.report_ttl"
           label="Time to Live"
           type="number"
           style="max-width: 200px"
@@ -82,10 +81,9 @@ export default defineComponent({
 
     function onSubmit(e) {
 
-      store.grid = "afa"
       store.grid = grid.value;
       store.callsign = callsign.value;
-      console.log("SUBMITTED", e, callsign.value, grid.value, store.grid);
+      // console.log("SUBMITTED", e, callsign.value, grid.value, store.grid);
       // store.topic = [111];
     }
   },

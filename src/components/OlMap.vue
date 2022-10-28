@@ -154,15 +154,17 @@ export default {
     // },
 
     featureSelected(event) {
-      if(this.overlaydisplay == "none") {
-        this.overlaydisplay = "block"
-      } else {
-        this.overlaydisplay = "none"
-      }
+      // if(this.overlaydisplay == "none") {
+      //   this.overlaydisplay = "block"
+      // } else {
+      //   this.overlaydisplay = "none"
+      // }
       // console.log("XX", event.selected[0], );
       // console.log("SSS ", this.store.report_points[event.selected[0].values_.seqno])
-      // console.log("XX", event.target.getFeatures().array_[0], );
-      let rep = this.store.report_points[event.selected[0].values_.seqno].report
+      console.log("XX",event.selected[0])
+      //console.log("eeee ", rep)
+      if( event.selected[0] ) {
+        let rep = this.store.report_points[event.selected[0].values_.seqno].report
       console.log("eeee ", rep)
       this.oposition = event.selected[0].values_.geometry.extent_;
       this.lat = parseFloat(this.oposition[1]).toFixed(4)
@@ -172,6 +174,10 @@ export default {
       this.band = rep.b
       this.rgrid = rep.rl
       this.sgrid = rep.sl
+      } else {
+        this.oposition = null
+      }
+
 
     },
     // featuresSelected(e) {
