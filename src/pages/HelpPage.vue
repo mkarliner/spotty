@@ -31,7 +31,7 @@ Teardrop markers are spots for transmissions from the specified callsign.
 There is also a 'log' view which shows a scrolling list of spots.
 
 ### Settings
-Settings are as follows
+Settings are as follows, they are saved on your browser.
 #### Callsign / Grid
 Switches between single callsign monitoring and grid square monitoring
 #### Broker
