@@ -23,7 +23,9 @@ Spotty is a web application that shows near real-time spots for data provided by
 
 ### Map View
 The initial view is a map showing signals transmitted from the grid square IO91 (South East England). Signals are shown for 60 seconds after they are first reported. This can be changed on the settings tab.
-Clicking on a spot brings up a overlay with details for the spot
+Clicking on a spot brings up a overlay with details for the spot. Clicking out of the overlay dismisses it.
+Small spots are those heard by the specified location/callsign. Large spots are tranmissions from the location.
+Teardrop markers are spots for transmissions from the specified callsign.
 
 ### Log View
 There is also a 'log' view which shows a scrolling list of spots.
