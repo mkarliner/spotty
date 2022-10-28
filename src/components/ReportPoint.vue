@@ -15,9 +15,9 @@
       @select="featureSelected">
   </ol-interaction-select> -->
     <ol-style>
-      <ol-style-icon v-if="owncall" :src="markerIcon" :color="fillColor()" :scale="0.05"></ol-style-icon>
+      <ol-style-icon v-if="owncall" :src="markerIcon" :color="fillColor" :scale="0.05"></ol-style-icon>
       <ol-style-circle v-else :radius="radius" >
-        <ol-style-fill :color="fillColor()"></ol-style-fill>
+        <ol-style-fill :color="fillColor"></ol-style-fill>
         <ol-style-stroke
           :color="strokeColor"
           :width="strokeWidth"
@@ -33,7 +33,7 @@
 
 <script>
 // import { METHODS } from "http";
-import {watch, ref, inject, computed } from "vue";
+import {watch, ref, inject, computed, onMounted } from "vue";
 
 import markerIcon from '/src/assets/marker.png'
 // import olFeatureP from "src/components/OlFeatureP.vue";
@@ -43,29 +43,60 @@ import markerIcon from '/src/assets/marker.png'
 
 export default {
   name: "ReportPoint",
-  props: ["report", "coordinate", "sequenceNumber", "band", "callsign", "owncallsign"],
+  props: ["topic", "report", "rx_coordinate", "tx_coordinate", "sequenceNumber", "band", "callsign", "owncallsign"],
   emits: ["delete", "mapclick", "click"],
   setup(props) {
     // const coordinate = ref([-0.224, 51.555]);
     //const radius = ref(10);
     const radius = computed(() => {
-      //console.log(props.callsign,props.owncallsign)
-      if(props.callsign == props.owncallsign) {
-        return 12
-      } else {
+      //console.log("PTOP", props.topic)
+      if(props.topic == "grid_tx_topic" || props.topic == "callsign_tx_topic") {
         return 8
+      } else {
+        return 5
       }
 
     })
 
+    const coordinate = computed(() => {
+        if(props.topic == "grid_rx_topic" || props.topic ==  "callsign_rx_topic") {
+          return(props.tx_coordinate)
+        } else {
+          return(props.rx_coordinate)
+        }
+    })
+
     const owncall = computed(() => {
-      //console.log(props.callsign,props.owncallsign)
+      // console.log(props.callsign,props.owncallsign)
       if(props.callsign == props.owncallsign) {
         return true
       } else {
         return false
       }
 
+    })
+
+    const  fillColor = computed(() => {
+      // console.log(this.band)
+      switch (props.band) {
+        case "40m":
+          return "blue";
+        case "30m":
+          return "green";
+        case "20m":
+          return "orange";
+        case "17m":
+          return "yellow";
+        case "15m":
+          return "#CAA36A";
+        case "12m":
+          return "#B11A28"
+        case "10m":
+          return "pink";
+        case "6m":
+          return "#FD001D";
+      }
+      return "grey";
     })
 
     const strokeWidth = ref(1);
@@ -87,10 +118,17 @@ export default {
       console.log("CHANGE", n, o)
     })
 
+    onMounted(() => {
+    // this.selectConditions = inject("ol-selectconditions");
+    // this.selectCondition = this.selectConditions.pointerMove;
+    //console.log("fff", this.band)
+    // console.log("PROPS ", props)
+  })
+
     return {
       markerIcon,
-
-
+      fillColor,
+      coordinate,
       selectConditions,
       selectCondition,
       featureSelected,
@@ -103,11 +141,7 @@ export default {
     };
   },
 
-  mounted() {
-    // this.selectConditions = inject("ol-selectconditions");
-    // this.selectCondition = this.selectConditions.pointerMove;
-    // console.log("fff", this)
-  },
+
   data() {
     return {
       aaa: 123,
@@ -129,35 +163,10 @@ export default {
     //   clearTimeout(this.to)
     // }
     // }
-    clickty(e) {
-      console.log("CC ", e)
-    },
-    things() {
+     things() {
       return {seqno: this.sequenceNumber}
     },
-    fillColor() {
-      // console.log(this.band)
-      switch (this.band) {
-        case "40m":
-          return "blue";
-        case "30m":
-          return "green";
-        case "20m":
-          return "orange";
-        case "17m":
-          return "yellow";
-        case "15m":
-          return "#CAA36A";
-        case "12m":
-          return "#B11A28"
-        case "10m":
-          return "pink";
-        case "6m":
-          return "#FD001D";
-      }
-      return "grey";
-    },
-  },
+     },
   components: {
     // olFeatureP
   },

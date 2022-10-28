@@ -20,6 +20,7 @@
     "events": "^3.3.0",
     "mqtt": "^4.3.7",
     "pinia": "^2.0.22",
+    "pinia-plugin-persistedstate": "^2.3.0",
     "qth-locator": "^2.1.0",
     "quasar": "^2.6.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
