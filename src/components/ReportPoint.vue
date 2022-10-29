@@ -34,6 +34,7 @@
 <script>
 // import { METHODS } from "http";
 import {watch, ref, inject, computed, onMounted } from "vue";
+import proj4 from "proj4";
 
 import markerIcon from '/src/assets/marker.png'
 // import olFeatureP from "src/components/OlFeatureP.vue";
@@ -60,9 +61,9 @@ export default {
 
     const coordinate = computed(() => {
         if(props.topic == "grid_rx_topic" || props.topic ==  "callsign_rx_topic") {
-          return(props.tx_coordinate)
+          return proj4("EPSG:3857", props.tx_coordinate);
         } else {
-          return(props.rx_coordinate)
+          return proj4("EPSG:3857", props.rx_coordinate);
         }
     })
 
@@ -106,13 +107,13 @@ export default {
 
     const selectCondition = null;
 
-    const featureSelected = (event) => {
-      console.log(event.selected[0]);
-    };
+    // const featureSelected = (event) => {
+    //   console.log(event.selected[0]);
+    // };
 
-    const selectInteactionFilter = (feature) => {
-      return feature.values_.name != undefined;
-    };
+    // const selectInteactionFilter = (feature) => {
+    //   return feature.values_.name != undefined;
+    // };
 
     watch(radius, (n,o) => {
       console.log("CHANGE", n, o)
@@ -131,8 +132,8 @@ export default {
       coordinate,
       selectConditions,
       selectCondition,
-      featureSelected,
-      selectInteactionFilter, // coordinate,
+      //featureSelected,
+      //selectInteactionFilter, // coordinate,
       radius,
       owncall,
       strokeWidth,
