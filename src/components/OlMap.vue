@@ -77,10 +77,10 @@ export default {
   mixins: [VueScreenSizeMixin],
   mounted() {},
   setup() {
-    const center = ref([-0.224, 51.555]);
+    const center = ref(proj4("EPSG:3857",[0, 10]));
     const overlaydisplay = ref("display: block");
     const projection = ref("EPSG:3857");
-    const zoom = ref(1);
+    const zoom = ref(2);
     const rotation = ref(0);
     const radius = ref(5);
     const strokeWidth = ref(10);
