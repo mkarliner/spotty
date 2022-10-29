@@ -38,7 +38,7 @@
     <q-footer elevated class = "bg-grey-8 text-white" >
       <q-toolbar>
         <q-toolbar-title>
-          <div>G8LKD - Mike Karliner</div>
+          <div>G8LKD - Mike Karliner  latency: {{((Date.now() - store.last_spot))/1000}} seconds </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>

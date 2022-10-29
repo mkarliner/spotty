@@ -138,7 +138,7 @@ export default {
     return {
       // report_points: reppoints,
       // report_points: [{ sequenceNumber: 1, coordinate: [-0.224, 51.555] }]
-      report_points: {},
+      //report_points: {},
     };
   },
 

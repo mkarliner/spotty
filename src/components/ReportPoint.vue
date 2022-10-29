@@ -59,6 +59,16 @@ export default {
 
     })
 
+    const strokeWidth = computed(() => {
+      //console.log("PTOP", props.topic)
+      if(props.callsign == props.owncallsign) {
+        return 3
+      } else {
+        return 1
+      }
+
+    })
+
     const coordinate = computed(() => {
         if(props.topic == "grid_rx_topic" || props.topic ==  "callsign_rx_topic") {
           return proj4("EPSG:3857", props.tx_coordinate);
@@ -100,7 +110,7 @@ export default {
       return "grey";
     })
 
-    const strokeWidth = ref(1);
+    //const strokeWidth = ref(1);
     const strokeColor = ref("gray");
     //const fillColor = ref("white");
     const selectConditions = null;

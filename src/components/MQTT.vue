@@ -85,6 +85,8 @@ export default {
           if (store.report_points.hasOwnProperty(rep.sq)) {
             console.log("ALERT, Duplicate");
           } else {
+            store.last_spot = parseInt(rep.t) * 1000
+            //console.log("LS:", parseInt(rep.t), new Date(store.last_spot))
             store.report_points[rep.sq] = {
               topic: topic,
               report: rep,

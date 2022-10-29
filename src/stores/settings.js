@@ -8,6 +8,7 @@ export const useSettingsStore = defineStore("settings", {
     callsign: "MY8CALL",
     grid: "AA91",
     mode: "grid",
+    last_spot: Date.now()
   }),
 
   persist: {
