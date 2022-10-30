@@ -90,6 +90,8 @@ export default {
     const  fillColor = computed(() => {
       // console.log(this.band)
       switch (props.band) {
+        case "80m":
+          return "#e54be0"
         case "40m":
           return "blue";
         case "30m":
