@@ -12,7 +12,7 @@
     <MQTT></MQTT>
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
-        <q-toolbar-title>
+        <q-toolbar-title class="toolbar">
           Live spots from pskreporter.info Monitoring: Callsign: {{ store.callsign }} Grid: {{store.grid}}
         </q-toolbar-title>
       </q-toolbar>
@@ -38,7 +38,7 @@
     <q-footer elevated class = "bg-grey-8 text-white" >
       <q-toolbar>
         <q-toolbar-title>
-          <div>G8LKD - Mike Karliner  latency: {{((Date.now() - store.last_spot))/1000}} seconds </div>
+          <div class="footer">G8LKD - Mike Karliner  latency: {{((Date.now() - store.last_spot))/1000}} seconds </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>
@@ -67,3 +67,12 @@ export default defineComponent({
 })
 </script>
 
+<style scoped>
+
+.toolbar {
+  font-size: 1rem;
+}
+.footer {
+  font-size: .8rem;
+}
+</style>
