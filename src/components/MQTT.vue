@@ -19,15 +19,26 @@ export default {
     const store = useSettingsStore();
     console.log("STORE: ", store);
 
-    const { grid, callsign } = storeToRefs(store);
+    const { grid, callsign, track_callsign, track_grid } = storeToRefs(store);
 
     const topicss = computed(() => {
-      return {
-        callsign_tx_topic: `pskr/filter/v2/+/+/${callsign.value}/#`,
-        callsign_rx_topic: `pskr/filter/v2/+/+/+/${callsign.value}/#`,
-        grid_tx_topic: `pskr/filter/v2/+/+/+/+/${grid.value}/#`,
-        grid_rx_topic: `pskr/filter/v2/+/+/+/+/+/${grid.value}/#`,
-      };
+        let t = { }
+        if(track_callsign.value) {
+            t.callsign_tx_topic = `pskr/filter/v2/+/+/${callsign.value}/#`
+            t.callsign_rx_topic = `pskr/filter/v2/+/+/+/${callsign.value}/#`
+        }
+        if(track_grid.value) {
+            t.grid_tx_topic = `pskr/filter/v2/+/+/+/+/${grid.value}/#`,
+            t.grid_rx_topic = `pskr/filter/v2/+/+/+/+/+/${grid.value}/#`
+        }
+        return t
+
+      //  return {
+      //   callsign_tx_topic: `pskr/filter/v2/+/+/${callsign.value}/#`,
+      //   callsign_rx_topic: `pskr/filter/v2/+/+/+/${callsign.value}/#`,
+      //   grid_tx_topic: `pskr/filter/v2/+/+/+/+/${grid.value}/#`,
+      //   grid_rx_topic: `pskr/filter/v2/+/+/+/+/+/${grid.value}/#`,
+      // };
     });
 
     const convertCoordinates = function(coord) {
@@ -45,7 +56,7 @@ export default {
     // const topic = computed(() => store.topic);
     const report_ttl = computed(() => store.report_ttl);
 
-    watch([topicss], (newv, oldv) => {
+    watch([topicss, track_callsign.value, track_grid.value], (newv, oldv) => {
       console.log("WAT ", newv, oldv);
       for (const t in oldv[0]) {
         mqttHook.unSubscribe(oldv[0][t]);
@@ -57,7 +68,7 @@ export default {
     });
 
     watchEffect(() => {
-      console.log("CHANGE: ", grid.value, callsign.value);
+      console.log("CHANGE: ", grid.value, callsign.value, );
       console.log("TOPICS ", topicss.value);
       changeSubscriptions(grid, callsign);
     });
@@ -143,50 +154,5 @@ export default {
       callsign,
     };
   },
-
-  mounted() {
-    // this.store.$subscribe((mutation, state) => {
-    //   // console.log(
-    //   //   "state change ",
-    //   //   mutation, state
-    //   // );
-    //   // mqttHook.unsubscribe([mutation.])
-    //   // mqttHook.subscribe([this.store.topic]);
-    // });
-    // this.$refs.view.updateSize();
-    // mqttHook.subscribe(["pskr/filter/+/+/+/+/IO91/#"]);
-    // mqttHook.registerEvent("pskr/filter/+/+/+/+/IO91/#", (topic, message) => {
-    // console.log("ereeee", this.store.topic);
-    //                        this.changeSubscriptions(this.store.topic, null);
-    // mqttHook.subscribe([this.store.topic]);
-    // mqttHook.registerEvent(this.store.topic, (topic, message) => {
-    //   const rep = JSON.parse(message.toString());
-    //   //console.log(rep, rep.rl)
-    //   const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
-    //   const point = [receiverLon, receiverLat];
-    //   //console.log("RP:", Object.keys(this.store.report_points).length);
-    //   if (this.store.report_points.hasOwnProperty(rep.sq)) {
-    //     console.log("ALERT, Duplicate");
-    //   } else {
-    //     this.store.report_points[rep.sq] = {
-    //       report: rep,
-    //       sequenceNumber: rep.sq,
-    //       band: rep.b,
-    //       coordinate: point,
-    //     };
-    //     setTimeout(() => {
-    //       //console.log("bye bye", rep.sq, this.store.report_ttl);
-    //       delete this.store.report_points[rep.sq];
-    //     }, this.report_ttl * 1000);
-    //   }
-    // });
-  },
-
-  // watch: {
-  //   grid(n, o) {
-  //     console.log("TOPICS CHANGE ", n, o);
-  //     // this.changeSubscriptions(n, o);
-  //   },
-  // },
 };
 </script>

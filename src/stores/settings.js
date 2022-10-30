@@ -8,7 +8,9 @@ export const useSettingsStore = defineStore("settings", {
     callsign: "MY8CALL",
     grid: "AA91",
     mode: "grid",
-    last_spot: Date.now()
+    last_spot: Date.now(),
+    track_callsign: true,
+    track_grid: true
   }),
 
   persist: {

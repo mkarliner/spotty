@@ -2,18 +2,10 @@
   <q-page class="flex flex-center">
     <div class="q-pa-md">
       <q-form @submit.prevent="onSubmit" class="q-gutter-md">
-        <q-btn-toggle
-          v-model="mode"
-          push
-          glossy
-          toggle-color="primary"
-          :options="[
-            { label: 'Callsign', value: 'store.callsign' },
-            { label: 'Grid', value: 'store.grid' },
-          ]"
-        />
+
         <!-- <q-input v-model="broker" label="Broker" /> -->
 
+        <q-checkbox v-model="store.track_callsign" label="Track callsign" />
         <q-input
           label="Callsign"
           type="text"
@@ -22,6 +14,7 @@
           @input="event => {callsign = event.target.value; console.log('ddd')}"
           @update:modelValue = " e => callsign=e"
         />
+        <q-checkbox v-model="store.track_grid" label="Track grid" />
         <q-input
           label="Grid"
           type="text"
