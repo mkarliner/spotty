@@ -3962,6 +3962,11 @@ ol-ext@^3.2.24:
   resolved "https://registry.yarnpkg.com/ol-ext/-/ol-ext-3.2.30.tgz#d747b937dc95ef8f6a8ef1fc26162fed3d9b38db"
   integrity sha512-2Ls6FxfSRHzn7RzBAdeooiwcgA+dfR5a7it9xKLMgzIdVJhqSC1IyVSnPMmaX8yoLFEwywQHEzTQXlfGzUoEOw==
 
+ol-ext@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/ol-ext/-/ol-ext-4.0.3.tgz#82e67541cd8a4181c455cca62cc2eedce7e6ecee"
+  integrity sha512-AqpNxqV19UIjppjdnHraj5LU9+WCO/5qY91ln5Cu6qIud1zH8geTRJXFzSiUlhlxuz8TmyvRsWpOUJhtNDY7hw==
+
 ol-mapbox-style@^8.0.5:
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/ol-mapbox-style/-/ol-mapbox-style-8.2.1.tgz#0f0c252b6495853a137d7e4dd3f915fab664b356"

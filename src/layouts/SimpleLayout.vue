@@ -13,7 +13,7 @@
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title class="toolbar">
-          Live spots from pskreporter.info Monitoring: Callsign: {{ store.callsign }} Grid: {{store.grid}}
+          SPOTTY- live spots from pskreporter.info <span class="status-head">Monitoring: Callsign: {{ store.callsign }} Grid: {{store.grid}}</span>
         </q-toolbar-title>
       </q-toolbar>
 
@@ -22,6 +22,7 @@
         <q-route-tab to="/map" label="Map" />
         <q-route-tab to="/log" label="Log" />
         <q-route-tab to="/help" label="Help" />
+        <!-- <q-btn label="ddd" color="secondary"></q-btn> -->
 
       </q-tabs>
     </q-header>
@@ -72,6 +73,11 @@ export default defineComponent({
 .toolbar {
   font-size: 1rem;
 }
+
+.status-head {
+  background-color: "pink";
+}
+
 .footer {
   font-size: .8rem;
 }

@@ -19,6 +19,7 @@
     "element-plus": "^2.2.16",
     "events": "^3.3.0",
     "mqtt": "^4.3.7",
+    "ol-ext": "^4.0.3",
     "pinia": "^2.0.22",
     "pinia-plugin-persistedstate": "^2.3.0",
     "proj4": "^2.8.0",
