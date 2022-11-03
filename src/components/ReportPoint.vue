@@ -24,8 +24,7 @@
         ></ol-style-stroke>
       </ol-style-circle>
       <!-- <ol-style-text text="o" font="20px icons" ></ol-style-text> -->
-
-
+      <ol-style-text :offsetX="offsetX" :font="fstyle" :text="snr" ></ol-style-text>
     </ol-style>
   </ol-feature>
 </div>
@@ -35,6 +34,8 @@
 // import { METHODS } from "http";
 import {watch, ref, inject, computed, onMounted } from "vue";
 import proj4 from "proj4";
+import { useSettingsStore } from "stores/settings";
+import { storeToRefs } from "pinia";
 
 import markerIcon from '/src/assets/marker.png'
 // import olFeatureP from "src/components/OlFeatureP.vue";
@@ -49,6 +50,12 @@ export default {
   setup(props) {
     // const coordinate = ref([-0.224, 51.555]);
     //const radius = ref(10);
+
+    const offsetX = 10
+    const store = useSettingsStore()
+    const { show_snr } = storeToRefs(store);
+
+
     const radius = computed(() => {
       //console.log("PTOP", props.topic)
       if(props.topic == "grid_tx_topic" || props.topic == "callsign_tx_topic") {
@@ -59,6 +66,18 @@ export default {
 
     })
 
+    const snr = computed(() => {
+        // console.log("PTOP", show_snr.value, props.report.rp)
+        if(show_snr.value && props.report.sc == props.owncallsign) {
+          return props.report.rp.toString()
+        } else {
+          return ""
+        }
+
+      } )
+
+
+
     const strokeWidth = computed(() => {
       //console.log("PTOP", props.topic)
       if(props.callsign == props.owncallsign) {
@@ -66,6 +85,11 @@ export default {
       } else {
         return 1
       }
+
+    })
+
+    const fstyle = computed(() => {
+      return "italic 30px  serif;"
 
     })
 
@@ -139,6 +163,7 @@ export default {
   })
 
     return {
+      store,
       markerIcon,
       fillColor,
       coordinate,
@@ -150,6 +175,9 @@ export default {
       owncall,
       strokeWidth,
       strokeColor,
+      snr,
+      fstyle,
+      offsetX
       //fillColor,
     };
   },
