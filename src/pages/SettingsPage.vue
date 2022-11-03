@@ -15,6 +15,7 @@
           @update:modelValue = " e => callsign=e"
         />
         <q-checkbox v-model="store.track_grid" label="Track grid" />
+        <q-checkbox v-model="store.show_grid" label="Show grid" />
         <q-input
           label="Grid"
           type="text"
@@ -32,11 +33,13 @@
           type="number"
           style="max-width: 200px"
         />
+        <q-checkbox v-model="store.show_snr" label="Show SNR" />
         <div>
           <q-btn label="OK" type="submit" color="primary" />
         </div>
+
       </q-form>
-      <div class="q-pa-md"></div>
+
     </div>
   </q-page>
 </template>

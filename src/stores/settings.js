@@ -10,7 +10,9 @@ export const useSettingsStore = defineStore("settings", {
     mode: "grid",
     last_spot: Date.now(),
     track_callsign: true,
-    track_grid: true
+    track_grid: true,
+    show_snr: false,
+    show_grid: true
   }),
 
   persist: {
