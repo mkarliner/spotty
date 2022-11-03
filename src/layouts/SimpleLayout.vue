@@ -22,7 +22,7 @@
         <q-route-tab to="/map" label="Map" />
         <q-route-tab to="/log" label="Log" />
         <q-route-tab to="/help" label="Help" />
-        <!-- <q-btn label="ddd" color="secondary"></q-btn> -->
+
 
       </q-tabs>
     </q-header>
