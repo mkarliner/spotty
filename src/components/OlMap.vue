@@ -17,6 +17,7 @@
           <div class="overlay-content">
             <div>TX: {{ tcall }} RX: {{ rcall }}</div>
             <div>RX GRID: {{ rgrid }} BAND: {{ band }}</div>
+            <div>SNR: {{snr}}</div>
           </div>
         </ol-overlay>
       </ol-interaction-select>
@@ -31,13 +32,34 @@
       <ol-tile-layer>
         <ol-source-osm />
       </ol-tile-layer>
-      <ol-vector-layer>
+      <ol-vector-layer  >
         <ol-source-vector>
           <ol-feature
             v-for="p in this.store.report_points"
             v-bind:key="p.sequenceNumber"
           >
-            <report-point
+            <report-point v-if="p.report.sc != this.store.callsign && this.store.show_grid"
+              @delete="deleteRP"
+              :sequenceNumber="p.sequenceNumber"
+              :report="p.report"
+              :topic="p.topic"
+              :rx_coordinate="p.rx_coordinate"
+              :tx_coordinate="p.tx_coordinate"
+              :band="p.band"
+              :callsign="p.report.sc"
+              :owncallsign="this.store.callsign"
+            ></report-point>
+          </ol-feature>
+        </ol-source-vector>
+      </ol-vector-layer>
+
+      <ol-vector-layer >
+        <ol-source-vector>
+          <ol-feature
+            v-for="p in this.store.report_points"
+            v-bind:key="p.sequenceNumber"
+          >
+            <report-point v-if="p.report.sc == this.store.callsign"
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
               :report="p.report"
@@ -91,12 +113,16 @@ export default {
     const tcall = ref("-");
     const rgrid = ref("-");
     const sgrid = ref("-");
+    const snr = ref("-")
     // const lat = 0;
     // const lon = 50;
     const band = ref("-");
 
     const store = useSettingsStore();
-    const topic = computed(() => store.topic);
+
+
+
+    // const topic = computed(() => store.topic);
 
     // const oposition = computed(() => {
     //   return null
@@ -129,6 +155,7 @@ export default {
       band,
       overlaydisplay,
       oposition,
+
       // featureSelected,
     };
   },
@@ -186,6 +213,7 @@ export default {
         this.band = rep.b;
         this.rgrid = rep.rl;
         this.sgrid = rep.sl;
+        this.snr = rep.rp;
         console.log("eeee ",  this);
       } else {
         this.oposition = null;
