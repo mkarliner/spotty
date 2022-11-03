@@ -56,13 +56,13 @@ export default {
     // const topic = computed(() => store.topic);
     const report_ttl = computed(() => store.report_ttl);
 
-    watch([topicss, track_callsign.value, track_grid.value], (newv, oldv) => {
+    watch([topicss], (newv, oldv) => {
       console.log("WAT ", newv, oldv);
       for (const t in oldv[0]) {
         mqttHook.unSubscribe(oldv[0][t]);
         console.log("UNSUB : ", oldv[0][t]);
       }
-      return true;
+      // return true;
       // grid.value = newv[0]
       // callsign.value = newv[1]
     });
