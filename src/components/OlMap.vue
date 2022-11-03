@@ -59,7 +59,7 @@
             v-for="p in this.store.report_points"
             v-bind:key="p.sequenceNumber"
           >
-            <report-point v-if="p.report.sc == this.store.callsign"
+            <report-point v-if="p.report.sc == this.store.callsign || p.report.rc == this.store.callsign"
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
               :report="p.report"
