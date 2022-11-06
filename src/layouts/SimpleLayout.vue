@@ -21,6 +21,7 @@
         <q-route-tab to="/settings" label="Settings" />
         <q-route-tab to="/map" label="Map" />
         <q-route-tab to="/log" label="Log" />
+        <q-route-tab to="/status" label="Status" />
         <q-route-tab to="/help" label="Help" />
 
 

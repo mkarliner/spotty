@@ -116,6 +116,8 @@ export default {
       switch (props.band) {
         case "80m":
           return "#e54be0"
+        case "60m":
+          return "#0D0067"
         case "40m":
           return "blue";
         case "30m":

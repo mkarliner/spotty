@@ -24,6 +24,12 @@ const routes = [
   },
 
   {
+    path: "/status",
+    component: () => import("layouts/SimpleLayout.vue"),
+    children: [{ path: "", component: () => import("pages/StatusPage.vue") }],
+  },
+
+  {
     path: "/help",
     component: () => import("layouts/SimpleLayout.vue"),
     children: [{ path: "", component: () => import("pages/HelpPage.vue") }],
