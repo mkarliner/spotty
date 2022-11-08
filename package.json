@@ -28,6 +28,7 @@
     "rollup-plugin-node-polyfills": "^0.2.1",
     "url": "^0.11.0",
     "vue": "^3.0.0",
+    "vue-gtag": "^2.0.1",
     "vue-router": "^4.0.0",
     "vue-screen-size": "^2.0.4",
     "vue3-markdown-it": "^1.0.10",
