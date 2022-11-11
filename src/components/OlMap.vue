@@ -1,5 +1,7 @@
 <template>
+
   <div>
+
     <ol-map
       :loadTilesWhileAnimating="true"
       :loadTilesWhileInteracting="true"
@@ -12,6 +14,7 @@
         position: absolute;
       "
     >
+    <div style="display: flex; justify-content: flex-end;" >    <q-toggle v-model="store.show_grid" label="Show grid spots on map        ." /></div>
       <ol-interaction-select @select="featureSelected">
         <ol-overlay :position="oposition" >
           <div class="overlay-content">

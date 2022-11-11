@@ -15,7 +15,7 @@
           @update:modelValue = " e => callsign=e"
         />
         <q-checkbox v-model="store.track_grid" label="Track grid" />
-        <q-checkbox v-model="store.show_grid" label="Show grid" />
+        <!-- <q-checkbox v-model="store.show_grid" label="Show grid" /> -->
         <q-input
           label="Grid"
           type="text"
