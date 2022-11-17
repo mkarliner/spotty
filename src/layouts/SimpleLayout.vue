@@ -13,7 +13,15 @@
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
         <q-toolbar-title class="toolbar">
-          SPOTTY- live spots from pskreporter.info <span class="status-head">Monitoring: Callsign: {{ store.callsign }} Grid: {{store.grid}}</span>
+          <div class="row">
+            <div class="col">
+              SPOTTY- live spots from pskreporter.info
+            </div>
+            <div class="row">
+              <span class="status-head">Callsign: {{ store.callsign }} Grid: {{store.grid}}</span>
+            </div>
+          </div>
+
         </q-toolbar-title>
       </q-toolbar>
 
