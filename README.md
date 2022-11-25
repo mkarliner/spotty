@@ -1,5 +1,9 @@
 # Spotty Live Map of Signal Reports from PSKReporter
 
+Spotty takes a live  MQTT feed of signal reports from M0LTE (Tom) and
+maps them and creates other reports. See the help page text for more
+info.
+
 
 ## Install the dependencies
 ```bash
