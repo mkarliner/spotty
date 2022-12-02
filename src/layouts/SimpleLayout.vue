@@ -31,6 +31,7 @@
         <q-route-tab to="/log" label="Log" />
         <q-route-tab to="/status" label="Status" />
         <q-route-tab to="/help" label="Help" />
+        <q-route-tab to="/credits" label="Credits" />
 
 
       </q-tabs>
@@ -48,7 +49,7 @@
     <q-footer elevated class = "bg-grey-8 text-white" >
       <q-toolbar>
         <q-toolbar-title>
-          <div class="footer">G8LKD - Mike Karliner  latency: {{((Date.now() - store.last_spot))/1000}} seconds </div>
+          <div class="footer">  latencys: {{((Date.now() - store.last_spot))/1000}} seconds </div>
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>

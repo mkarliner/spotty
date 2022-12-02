@@ -35,6 +35,12 @@ const routes = [
     children: [{ path: "", component: () => import("pages/HelpPage.vue") }],
   },
 
+  {
+    path: "/credits",
+    component: () => import("layouts/SimpleLayout.vue"),
+    children: [{ path: "", component: () => import("pages/CreditsPage.vue") }],
+  },
+
   // {
     // path: "/",
     // component: () => import("layouts/SimpleLayout.vue"),
