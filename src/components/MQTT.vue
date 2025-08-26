@@ -8,7 +8,7 @@ import { locatorToLatLng } from "qth-locator";
 import { computed, reactive, onMounted, watch, ref, watchEffect } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
-import { iso1A2Code } from "@ideditor/country-coder";
+import { iso1A2Code } from "@rapideditor/country-coder";
 import { useCountryNames } from "./CountryNames";
 const mqttHook = useMQTT();
 
@@ -22,16 +22,16 @@ export default {
     const { grid, callsign, track_callsign, track_grid } = storeToRefs(store);
 
     const topicss = computed(() => {
-        let t = { }
-        if(track_callsign.value) {
-            t.callsign_tx_topic = `pskr/filter/v2/+/+/${callsign.value}/#`
-            t.callsign_rx_topic = `pskr/filter/v2/+/+/+/${callsign.value}/#`
-        }
-        if(track_grid.value) {
-            t.grid_tx_topic = `pskr/filter/v2/+/+/+/+/${grid.value}/#`,
-            t.grid_rx_topic = `pskr/filter/v2/+/+/+/+/+/${grid.value}/#`
-        }
-        return t
+      let t = {};
+      if (track_callsign.value) {
+        t.callsign_tx_topic = `pskr/filter/v2/+/+/${callsign.value}/#`;
+        t.callsign_rx_topic = `pskr/filter/v2/+/+/+/${callsign.value}/#`;
+      }
+      if (track_grid.value) {
+        ((t.grid_tx_topic = `pskr/filter/v2/+/+/+/+/${grid.value}/#`),
+          (t.grid_rx_topic = `pskr/filter/v2/+/+/+/+/+/${grid.value}/#`));
+      }
+      return t;
 
       //  return {
       //   callsign_tx_topic: `pskr/filter/v2/+/+/${callsign.value}/#`,
@@ -41,15 +41,16 @@ export default {
       // };
     });
 
-    const convertCoordinates = function(coord) {
-        let lon = coord[0]
-        let lat = coord[1]
-        let x = (lon * 20037508.34) / 180;
-        let y =  Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180);
-        y = (y * 20037508.34) / 180;
-        console.log("CC ", lon, lat, x,y)
-        return [x, y];
-      }
+    const convertCoordinates = function (coord) {
+      let lon = coord[0];
+      let lat = coord[1];
+      let x = (lon * 20037508.34) / 180;
+      let y =
+        Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180);
+      y = (y * 20037508.34) / 180;
+      console.log("CC ", lon, lat, x, y);
+      return [x, y];
+    };
 
     const { codeToCountryName } = useCountryNames();
     // console.log("CCC ", codeToCountryName);
@@ -68,7 +69,7 @@ export default {
     });
 
     watchEffect(() => {
-      console.log("CHANGE: ", grid.value, callsign.value, );
+      console.log("CHANGE: ", grid.value, callsign.value);
       console.log("TOPICS ", topicss.value);
       changeSubscriptions(grid, callsign);
     });
@@ -87,16 +88,16 @@ export default {
         mqttHook.registerEvent(topics[topic], (actual_topic, message) => {
           const rep = JSON.parse(message.toString());
           // console.log( rep, rep.sq);
-          const [receiverLat, receiverLon] = (locatorToLatLng(rep.rl));
+          const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
           const rx_point = [receiverLon, receiverLat];
-          const [senderLat, senderLon] = (locatorToLatLng(rep.sl));
+          const [senderLat, senderLon] = locatorToLatLng(rep.sl);
           const tx_point = [senderLon, senderLat];
           // console.log("RP:", Object.keys(this.store.report_points).length);
           //console.log("RPS: ", this.store.report_points);
           if (store.report_points.hasOwnProperty(rep.sq)) {
             console.log("ALERT, Duplicate");
           } else {
-            store.last_spot = parseInt(rep.t) * 1000
+            store.last_spot = parseInt(rep.t) * 1000;
             //console.log("LS:", parseInt(rep.t), new Date(store.last_spot))
             store.report_points[rep.sq] = {
               topic: topic,

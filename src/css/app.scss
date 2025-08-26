@@ -1,17 +1,74 @@
 // app global css in SCSS form
 
-
+// Typography improvements
 h2 {
   font-size: 2rem;
-  line-height: 1rem;
+  line-height: 1.2;
 }
 
 h3 {
-font-size: 1.5rem;
-line-height: 1rem;
+  font-size: 1.5rem;
+  line-height: 1.2;
 }
 
 h4 {
   font-size: 1.2rem;
-  line-height: 1rem;
+  line-height: 1.2;
+}
+
+// Global responsive improvements
+.q-page-container {
+  padding-top: 0 !important;
+}
+
+// Mobile-first responsive design
+@media (max-width: 599px) {
+  .q-toolbar {
+    min-height: 48px;
   }
+
+  .q-tabs {
+    .q-tab {
+      min-width: 0;
+      padding: 0 8px;
+    }
+  }
+
+  .q-chip {
+    font-size: 0.7rem;
+    height: 20px;
+  }
+}
+
+// Tablet optimizations
+@media (min-width: 600px) and (max-width: 1023px) {
+  .q-toolbar-title {
+    font-size: 1.1rem;
+  }
+}
+
+// Better focus states for accessibility
+.q-btn:focus,
+.q-tab:focus,
+.q-toggle:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+// Smooth transitions
+.q-layout,
+.q-page,
+.q-card {
+  transition: all 0.2s ease-in-out;
+}
+
+// Ham radio themed colors
+:root {
+  --ham-primary: #1976d2;
+  --ham-secondary: #26a69a;
+  --ham-accent: #9c27b0;
+  --ham-positive: #21ba45;
+  --ham-negative: #c10015;
+  --ham-info: #31ccec;
+  --ham-warning: #f2c037;
+}
