@@ -5,16 +5,15 @@
 </template>
 
 <script>
-import Markdown from 'vue3-markdown-it';
+import Markdown from "vue3-markdown-it";
 
 export default {
   components: {
-    Markdown
+    Markdown,
   },
   data() {
     return {
-      source:
-`
+      source: `
 
 
 ## Credits
@@ -26,22 +25,28 @@ Thank you both, G8LKD - Mike Karliner, Spotty author.
 
 
 
-      `
-    }
-  }
-}
+      `,
+    };
+  },
+};
 </script>
 
-
-
 <style scoped>
-
 .txtbody {
   width: 50%;
+  padding-top: 120px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+@media (max-width: 599px) {
+  .txtbody {
+    width: 90%;
+    padding-top: 140px;
+  }
 }
 
 h2 {
   font-size: 1rem;
 }
-
 </style>

@@ -207,7 +207,7 @@ export default {
 
     // Helper methods
     const getBandColor = (band) => {
-      const colors = {
+      const lightColors = {
         "160m": "#8B0000",
         "80m": "#e54be0",
         "60m": "#0D0067",
@@ -221,7 +221,25 @@ export default {
         "6m": "#FD001D",
         "2m": "#9932CC",
       };
-      return colors[band] || "#808080";
+
+      const darkColors = {
+        "160m": "#ff6b6b",
+        "80m": "#f06292",
+        "60m": "#5c6bc0",
+        "40m": "#42a5f5",
+        "30m": "#66bb6a",
+        "20m": "#ffb74d",
+        "17m": "#fff176",
+        "15m": "#d4b896",
+        "12m": "#e57373",
+        "10m": "#f48fb1",
+        "6m": "#ff5722",
+        "2m": "#ba68c8",
+      };
+
+      const isDark = store.dark_mode;
+      const colors = isDark ? darkColors : lightColors;
+      return colors[band] || (isDark ? "#bdbdbd" : "#808080");
     };
 
     const getSnrClass = (snr) => {
@@ -396,6 +414,12 @@ export default {
   min-width: 180px;
 }
 
+.body--dark .controls-card {
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
 .controls-container {
   display: flex;
   flex-direction: column;
@@ -421,6 +445,12 @@ export default {
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+.body--dark .spot-popup {
+  background: #2d2d2d;
+  color: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
 .popup-header {
   display: flex;
   align-items: center;
@@ -428,6 +458,11 @@ export default {
   padding: 8px 12px;
   background: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
+}
+
+.body--dark .popup-header {
+  background: #404040;
+  border-bottom: 1px solid #555;
 }
 
 .band-indicator {

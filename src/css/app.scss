@@ -72,3 +72,56 @@ h4 {
   --ham-info: #31ccec;
   --ham-warning: #f2c037;
 }
+
+// Dark mode enhancements
+.body--dark {
+  // Custom dark mode colors for ham radio theme
+  --ham-primary: #42a5f5;
+  --ham-secondary: #4db6ac;
+  --ham-accent: #ba68c8;
+
+  // Enhanced table styling for dark mode
+  .q-markup-table {
+    background: #2d2d2d;
+
+    tbody tr {
+      border-bottom: 1px solid #444;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    td {
+      color: #ffffff;
+      border-color: #444;
+    }
+  }
+
+  // Dark mode card improvements
+  .q-card {
+    background: #2d2d2d;
+    border: 1px solid #444;
+  }
+
+  // Form improvements in dark mode
+  .q-field--outlined .q-field__control {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  // Better contrast for text
+  .text-caption {
+    opacity: 0.8;
+  }
+
+  // Status indicators for dark mode
+  .text-green {
+    color: #66bb6a !important;
+  }
+  .text-yellow {
+    color: #ffb74d !important;
+  }
+  .text-red {
+    color: #ef5350 !important;
+  }
+}

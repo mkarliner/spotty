@@ -1,18 +1,28 @@
 <template>
-  <q-page class="flex flex-center">
-    <div class="q-pa-md">
+  <q-page class="settings-page">
+    <div class="q-pa-md settings-content">
       <q-form @submit.prevent="onSubmit" class="q-gutter-md">
-
         <!-- <q-input v-model="broker" label="Broker" /> -->
 
+        <q-separator class="q-my-md" />
+        <div class="text-h6 q-mb-md">Appearance</div>
+        <q-checkbox v-model="store.dark_mode" label="Dark mode" />
+
+        <q-separator class="q-my-md" />
+        <div class="text-h6 q-mb-md">Tracking</div>
         <q-checkbox v-model="store.track_callsign" label="Track callsign" />
         <q-input
           label="Callsign"
           type="text"
           mask="NNNNNNNN"
           :model-value="store.callsign"
-          @input="event => {callsign = event.target.value; console.log('ddd')}"
-          @update:modelValue = " e => callsign=e"
+          @input="
+            (event) => {
+              callsign = event.target.value;
+              console.log('ddd');
+            }
+          "
+          @update:modelValue="(e) => (callsign = e)"
         />
         <q-checkbox v-model="store.track_grid" label="Track grid" />
         <!-- <q-checkbox v-model="store.show_grid" label="Show grid" /> -->
@@ -21,8 +31,8 @@
           type="text"
           mask="AA##"
           :model-value="store.grid"
-          @update:modelValue = " e => grid=e"
-          />
+          @update:modelValue="(e) => (grid = e)"
+        />
 
         <!-- <q-form @keydown.enter.prevent="changeTopic">
           <q-input label="Topic" type="text" v-model="topic" />
@@ -37,9 +47,7 @@
         <div>
           <q-btn label="OK" type="submit" color="primary" />
         </div>
-
       </q-form>
-
     </div>
   </q-page>
 </template>
@@ -57,8 +65,8 @@ export default defineComponent({
   name: "SettingsPage",
   setup() {
     const store = useSettingsStore();
-    const {gridw, callsignw} = storeToRefs(useSettingsStore)
-    const callsign = ref(store.callsign)
+    const { gridw, callsignw } = storeToRefs(useSettingsStore);
+    const callsign = ref(store.callsign);
     const grid = ref(store.grid);
     // const ttl = 60
     const mode = "callsign";
@@ -76,7 +84,6 @@ export default defineComponent({
     };
 
     function onSubmit(e) {
-
       store.grid = grid.value;
       store.callsign = callsign.value;
       // console.log("SUBMITTED", e, callsign.value, grid.value, store.grid);
@@ -122,9 +129,9 @@ export default defineComponent({
     // ttl(){
     //   return this.store.report_ttl
     // }
-    fooo (ss) {
-      console.log(ss)
-    }
+    fooo(ss) {
+      console.log(ss);
+    },
   },
   data() {
     return {
@@ -138,3 +145,18 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="sass" scoped>
+.settings-page
+  padding-top: 120px
+  min-height: 100vh
+
+.settings-content
+  max-width: 800px
+  margin: 0 auto
+
+// Mobile responsive
+@media (max-width: 599px)
+  .settings-page
+    padding-top: 140px
+</style>
