@@ -119,9 +119,9 @@ export default {
       return props.callsign === props.owncallsign;
     });
 
-    // Enhanced color scheme
+    // Enhanced color scheme with dark mode support
     const fillColor = computed(() => {
-      const colors = {
+      const lightColors = {
         "160m": "#8B0000", // Dark red
         "80m": "#e54be0", // Magenta
         "60m": "#0D0067", // Dark blue
@@ -136,7 +136,26 @@ export default {
         "2m": "#9932CC", // Purple
         "70cm": "#FF1493", // Deep pink
       };
-      return colors[props.band] || "#808080"; // Default gray
+
+      const darkColors = {
+        "160m": "#ff6b6b", // Lighter red for dark mode
+        "80m": "#f06292", // Lighter magenta
+        "60m": "#5c6bc0", // Lighter blue
+        "40m": "#42a5f5", // Lighter blue
+        "30m": "#66bb6a", // Lighter green
+        "20m": "#ffb74d", // Lighter orange
+        "17m": "#fff176", // Lighter yellow
+        "15m": "#d4b896", // Lighter brown
+        "12m": "#e57373", // Lighter red
+        "10m": "#f48fb1", // Lighter pink
+        "6m": "#ff5722", // Lighter red
+        "2m": "#ba68c8", // Lighter purple
+        "70cm": "#ff4081", // Lighter deep pink
+      };
+
+      const isDark = store.dark_mode;
+      const colors = isDark ? darkColors : lightColors;
+      return colors[props.band] || (isDark ? "#bdbdbd" : "#808080");
     });
 
     // SNR display logic

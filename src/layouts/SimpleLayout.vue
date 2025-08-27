@@ -21,7 +21,7 @@
             </div>
             <q-space />
             <div class="col-auto">
-              <div class="row q-gutter-xs">
+              <div class="row q-gutter-xs items-center">
                 <q-chip
                   v-if="store.callsign"
                   icon="radio"
@@ -42,6 +42,22 @@
                 >
                   {{ store.grid }}
                 </q-chip>
+                <q-btn
+                  flat
+                  round
+                  :icon="store.dark_mode ? 'light_mode' : 'dark_mode'"
+                  @click="toggleDarkMode"
+                  class="q-ml-sm"
+                  size="sm"
+                >
+                  <q-tooltip>
+                    {{
+                      store.dark_mode
+                        ? "Switch to Light Mode"
+                        : "Switch to Dark Mode"
+                    }}
+                  </q-tooltip>
+                </q-btn>
               </div>
             </div>
           </div>
@@ -104,15 +120,17 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
+import { useQuasar } from "quasar";
 import MQTT from "src/components/MQTT.vue";
 
 export default defineComponent({
   setup() {
     const store = useSettingsStore();
+    const $q = useQuasar();
     const count = computed(() => store.topic);
 
     const latencyColor = computed(() => {
@@ -122,9 +140,23 @@ export default defineComponent({
       return "text-red";
     });
 
+    // Watch for dark mode changes and apply to Quasar
+    watch(
+      () => store.dark_mode,
+      (newValue) => {
+        $q.dark.set(newValue);
+      },
+      { immediate: true },
+    );
+
+    const toggleDarkMode = () => {
+      store.dark_mode = !store.dark_mode;
+    };
+
     return {
       store,
       latencyColor,
+      toggleDarkMode,
     };
   },
   components: {

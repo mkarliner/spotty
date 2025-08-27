@@ -14,6 +14,7 @@ export const useSettingsStore = defineStore("settings", {
     show_snr: false,
     show_grid: true,
     show_band_labels: false,
+    dark_mode: false,
   }),
 
   persist: {
