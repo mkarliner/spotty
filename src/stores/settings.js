@@ -12,7 +12,8 @@ export const useSettingsStore = defineStore("settings", {
     track_callsign: true,
     track_grid: true,
     show_snr: false,
-    show_grid: true
+    show_grid: true,
+    show_band_labels: false,
   }),
 
   persist: {

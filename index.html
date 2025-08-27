@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv='cache-control' content='no-cache'>
-    <meta http-equiv='expires' content='0'>
-    <meta http-equiv='pragma' content='no-cache'>
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
     <link
       rel="icon"
       type="image/svg+xml"
@@ -16,18 +16,15 @@
     <script>
       window.global = window;
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@ideditor/country-coder@5.0/dist/country-coder.iife.min.js"></script>
-    <script type="module" >
-      let pr = null
-      if(process.env.PROD) {
-          import( "process").then(
-            (p) => {
-              window.process = p.process
-              console.log(p.process)
-            }
-          )
-
-        }
+    <script src="https://cdn.jsdelivr.net/npm/@rapideditor/country-coder@5.3/dist/country-coder.iife.min.js"></script>
+    <script type="module">
+      let pr = null;
+      if (process.env.PROD) {
+        import("process").then((p) => {
+          window.process = p.process;
+          console.log(p.process);
+        });
+      }
 
       import EventEmitter from "events";
       import { Buffer } from "buffer";

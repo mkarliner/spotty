@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex flex-center">
-    <OlMap></OlMap>
+  <q-page class="map-page">
+    <OlMap />
   </q-page>
 </template>
 
@@ -15,3 +15,11 @@ export default defineComponent({
   components: { OlMap },
 });
 </script>
+
+<style scoped>
+.map-page {
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+</style>
