@@ -5,7 +5,7 @@
 <script>
 import { useMQTT } from "mqtt-vue-hook";
 import { locatorToLatLng } from "qth-locator";
-import { computed, reactive, onMounted, watch, ref, watchEffect } from "vue";
+import { computed, reactive, onMounted, onUnmounted, watch, ref, watchEffect } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
 import { iso1A2Code } from "@rapideditor/country-coder";
@@ -28,8 +28,8 @@ export default {
         t.callsign_rx_topic = `pskr/filter/v2/+/+/+/${callsign.value}/#`;
       }
       if (track_grid.value) {
-        ((t.grid_tx_topic = `pskr/filter/v2/+/+/+/+/${grid.value}/#`),
-          (t.grid_rx_topic = `pskr/filter/v2/+/+/+/+/+/${grid.value}/#`));
+        t.grid_tx_topic = `pskr/filter/v2/+/+/+/+/${grid.value}/#`;
+        t.grid_rx_topic = `pskr/filter/v2/+/+/+/+/+/${grid.value}/#`;
       }
       return t;
 
@@ -57,91 +57,108 @@ export default {
     // const topic = computed(() => store.topic);
     const report_ttl = computed(() => store.report_ttl);
 
-    watch([topicss], (newv, oldv) => {
-      console.log("WAT ", newv, oldv);
-      for (const t in oldv[0]) {
-        mqttHook.unSubscribe(oldv[0][t]);
-        console.log("UNSUB : ", oldv[0][t]);
-      }
-      // return true;
-      // grid.value = newv[0]
-      // callsign.value = newv[1]
-    });
+    const registeredTopics = ref(new Set());
 
-    watchEffect(() => {
-      console.log("CHANGE: ", grid.value, callsign.value);
-      console.log("TOPICS ", topicss.value);
-      changeSubscriptions(grid, callsign);
-    });
+    watch(topicss, (newTopics, oldTopics) => {
+      console.log("WAT ", newTopics, oldTopics);
+
+      // Unsubscribe from old topics
+      if (oldTopics) {
+        for (const t in oldTopics) {
+          mqttHook.unSubscribe(oldTopics[t]);
+          console.log("UNSUB : ", oldTopics[t]);
+        }
+      }
+
+      // Clear registered topics to allow re-registration
+      registeredTopics.value.clear();
+
+      // Subscribe to new topics
+      changeSubscriptions();
+    }, { immediate: true });
 
     function changeSubscriptions() {
-      // console.log("TT ", newt, oldt);
-      // if(oldt) {
-      //   mqttHook.unSubscribe(oldt);
-      // }
-
       const topics = topicss.value;
-      for (const topic in topics) {
-        // let ptop = topic;
-        mqttHook.subscribe(topics[topic]);
-        console.log("SUB: ", topics[topic]);
-        mqttHook.registerEvent(topics[topic], (actual_topic, message) => {
-          const rep = JSON.parse(message.toString());
-          // console.log( rep, rep.sq);
-          const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
-          const rx_point = [receiverLon, receiverLat];
-          const [senderLat, senderLon] = locatorToLatLng(rep.sl);
-          const tx_point = [senderLon, senderLat];
-          // console.log("RP:", Object.keys(this.store.report_points).length);
-          //console.log("RPS: ", this.store.report_points);
-          if (store.report_points.hasOwnProperty(rep.sq)) {
-            console.log("ALERT, Duplicate");
-          } else {
-            store.last_spot = parseInt(rep.t) * 1000;
-            //console.log("LS:", parseInt(rep.t), new Date(store.last_spot))
-            store.report_points[rep.sq] = {
-              topic: topic,
-              report: rep,
-              sequenceNumber: rep.sq,
-              band: rep.b,
-              rx_coordinate: rx_point,
-              tx_coordinate: tx_point,
-              countryName: codeToCountryName(iso1A2Code(rx_point)),
-              timestamp: Date.now(),
-            };
-            //console.log("Country:", iso1A2Code(point), codeToCountryName(iso1A2Code(point)))
-            // setTimeout(() => {
-            //   //console.log("bye bye", rep.sq, this.store.report_ttl);
-            //   delete this.store.report_points[rep.sq];
-            // }, this.store.report_ttl * 1000);
+
+      for (const topicKey in topics) {
+        const topicString = topics[topicKey];
+
+        // Skip if already registered to prevent duplicate handlers
+        if (registeredTopics.value.has(topicString)) {
+          continue;
+        }
+
+        mqttHook.subscribe(topicString);
+        console.log("SUB: ", topicString);
+        registeredTopics.value.add(topicString);
+
+        mqttHook.registerEvent(topicString, (actual_topic, message) => {
+          try {
+            const rep = JSON.parse(message.toString());
+
+            // Validate required fields
+            if (!rep.rl || !rep.sl || !rep.sq) {
+              console.warn("Invalid message, missing required fields:", rep);
+              return;
+            }
+
+            const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
+            const rx_point = [receiverLon, receiverLat];
+            const [senderLat, senderLon] = locatorToLatLng(rep.sl);
+            const tx_point = [senderLon, senderLat];
+
+            if (store.report_points.hasOwnProperty(rep.sq)) {
+              console.log("ALERT, Duplicate");
+            } else {
+              store.last_spot = parseInt(rep.t) * 1000;
+              store.report_points[rep.sq] = {
+                topic: topicString,
+                topicKey: topicKey,
+                report: rep,
+                sequenceNumber: rep.sq,
+                band: rep.b,
+                rx_coordinate: rx_point,
+                tx_coordinate: tx_point,
+                countryName: codeToCountryName(iso1A2Code(rx_point)),
+                timestamp: Date.now(),
+              };
+            }
+          } catch (error) {
+            console.error("Error processing MQTT message:", error, message.toString());
           }
         });
       }
     }
 
+    let cleanupIntervalId = null;
+
     onMounted(() => {
       console.log("MQTT mounted", store);
-      // changeSubscriptions(store);
-      //     store.$subscribe((mutation, state) => {
-      //       console.log("EVsssNT ",mutation.events)
-      //     // for(const e in mutation.events) {
-      //     //   console.log("EVNT ", e)
-      //     // }
-      // })
 
-      setInterval(function () {
-        // console.log("RP:", topics, Object.keys(store.report_points).length);
+      cleanupIntervalId = setInterval(function () {
         for (let r in store.report_points) {
           let age = (Date.now() - store.report_points[r].timestamp) / 1000;
-          //console.log("age ", age, store.report_points[r].sequenceNumber )
           if (age > store.report_ttl) {
             store.deletePoint(store.report_points[r].sequenceNumber);
-            //delete store.report_points[r].sq;
-            //console.log("DEL ", age)
           }
-          // console.log("AGE: ", age);
         }
       }, 10000);
+    });
+
+    onUnmounted(() => {
+      console.log("MQTT unmounted, cleaning up");
+
+      // Clear the interval
+      if (cleanupIntervalId !== null) {
+        clearInterval(cleanupIntervalId);
+      }
+
+      // Unsubscribe from all topics
+      const topics = topicss.value;
+      for (const t in topics) {
+        mqttHook.unSubscribe(topics[t]);
+        console.log("CLEANUP UNSUB: ", topics[t]);
+      }
     });
 
     return {

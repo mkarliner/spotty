@@ -1,7 +1,6 @@
 <template>
   <div :data-seqno="sequenceNumber">
     <ol-feature ref="sss" :properties="things()">
-      <div :data-seqno="sequenceNumber" @click="clickty"></div>
       <ol-geom-point :coordinates="coordinate"></ol-geom-point>
 
       <ol-style>
@@ -62,6 +61,7 @@ export default {
   name: "ReportPoint",
   props: [
     "topic",
+    "topicKey",
     "report",
     "rx_coordinate",
     "tx_coordinate",
@@ -77,7 +77,7 @@ export default {
 
     // Enhanced radius based on signal strength and type
     const radius = computed(() => {
-      const baseRadius = props.topic?.includes("tx") ? 8 : 6;
+      const baseRadius = props.topicKey?.includes("tx") ? 8 : 6;
       const snrBonus = props.report?.rp
         ? Math.max(0, Math.min(3, props.report.rp / 10))
         : 0;
@@ -86,7 +86,7 @@ export default {
 
     // Enhanced marker scale for own callsign
     const markerScale = computed(() => {
-      return props.topic?.includes("tx") ? 0.08 : 0.06;
+      return props.topicKey?.includes("tx") ? 0.08 : 0.06;
     });
 
     // Fill opacity based on signal strength
@@ -99,14 +99,14 @@ export default {
     // Enhanced stroke width
     const strokeWidth = computed(() => {
       if (props.callsign === props.owncallsign) return 3;
-      return props.topic?.includes("tx") ? 2 : 1;
+      return props.topicKey?.includes("tx") ? 2 : 1;
     });
 
     // Coordinate calculation
     const coordinate = computed(() => {
       if (
-        props.topic === "grid_rx_topic" ||
-        props.topic === "callsign_rx_topic"
+        props.topicKey === "grid_rx_topic" ||
+        props.topicKey === "callsign_rx_topic"
       ) {
         return proj4("EPSG:3857", props.tx_coordinate);
       } else {
@@ -174,7 +174,7 @@ export default {
     const showBandLabel = computed(() => {
       return (
         show_band_labels.value &&
-        (props.topic?.includes("tx") || props.callsign === props.owncallsign)
+        (props.topicKey?.includes("tx") || props.callsign === props.owncallsign)
       );
     });
 
@@ -231,19 +231,9 @@ export default {
     };
   },
 
-  data() {
-    return {
-      aaa: 123,
-      to: null,
-    };
-  },
-
   methods: {
     things() {
       return { seqno: this.sequenceNumber };
-    },
-    clickty() {
-      // Handle click events
     },
   },
 };

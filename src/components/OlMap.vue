@@ -118,6 +118,7 @@
               :sequenceNumber="p.sequenceNumber"
               :report="p.report"
               :topic="p.topic"
+              :topicKey="p.topicKey"
               :rx_coordinate="p.rx_coordinate"
               :tx_coordinate="p.tx_coordinate"
               :band="p.band"
@@ -143,6 +144,7 @@
               :sequenceNumber="p.sequenceNumber"
               :report="p.report"
               :topic="p.topic"
+              :topicKey="p.topicKey"
               :rx_coordinate="p.rx_coordinate"
               :tx_coordinate="p.tx_coordinate"
               :band="p.band"
@@ -170,7 +172,6 @@ const mqttHook = useMQTT();
 import { ref, provide } from "vue";
 import ReportPoint from "src/components/ReportPoint.vue";
 import VueScreenSizeMixin from "vue-screen-size";
-import { STATEMENT_TYPES } from "@babel/types";
 // import ReportPoint from "./ReportPoint.vue";
 // import OpenLayersMap from 'vue3-openlayers'
 export default {
@@ -292,7 +293,7 @@ export default {
   methods: {
     deleteRP(payload) {
       //console.log("Deletion", payload);
-      delete this.report_points[payload];
+      this.store.deletePoint(payload);
     },
 
     rxc(rxp) {
@@ -338,11 +339,10 @@ export default {
     },
 
     calculateDistance(grid1, grid2) {
-      // Simple distance calculation between two grid squares
-      // This is a placeholder - you might want to use a proper distance calculation
+      // Calculate distance between two grid squares using haversine formula
       try {
-        const [lat1, lon1] = this.gridToLatLon(grid1);
-        const [lat2, lon2] = this.gridToLatLon(grid2);
+        const [lat1, lon1] = locatorToLatLng(grid1);
+        const [lat2, lon2] = locatorToLatLng(grid2);
 
         const R = 6371; // Earth's radius in km
         const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -356,24 +356,9 @@ export default {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(R * c);
       } catch (e) {
+        console.error("Error calculating distance:", e);
         return null;
       }
-    },
-
-    gridToLatLon(grid) {
-      // Basic grid square to lat/lon conversion
-      // This is simplified - you might want to use the qth-locator library
-      if (!grid || grid.length < 4) return [0, 0];
-
-      const A = grid.charCodeAt(0) - 65;
-      const B = grid.charCodeAt(1) - 65;
-      const C = parseInt(grid.charAt(2));
-      const D = parseInt(grid.charAt(3));
-
-      const lon = A * 20 + C * 2 - 180 + 1;
-      const lat = B * 10 + D - 90 + 0.5;
-
-      return [lat, lon];
     },
     // featuresSelected(e) {
     //   console.log("FS", e)
