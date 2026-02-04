@@ -444,13 +444,18 @@ export default {
 .map-wrapper {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 120px - 90px); /* Subtract header (120px) and footer (~90px) */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .map-container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 .empty-state-overlay {
@@ -613,21 +618,55 @@ export default {
 
 /* Mobile optimizations */
 @media (max-width: 599px) {
+  .map-wrapper {
+    height: calc(100vh - 140px - 90px); /* Mobile header is taller */
+  }
+
+  .map-container {
+    height: calc(100vh - 140px - 90px); /* Mobile header is taller */
+  }
+
+  /* Compact controls for mobile - positioned at bottom */
   .map-controls {
-    top: 90px;
+    top: auto;
+    bottom: 10px;
     right: 5px;
+    left: 5px;
   }
 
   .controls-card {
-    min-width: 160px;
+    min-width: auto;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  .body--dark .controls-card {
+    background: rgba(30, 30, 30, 0.95);
   }
 
   .controls-card .q-card-section {
-    padding: 10px;
+    padding: 8px 12px;
   }
 
   .text-subtitle2 {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    margin-bottom: 6px;
+  }
+
+  /* Horizontal layout for toggles on mobile */
+  .controls-container {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 12px;
+  }
+
+  .controls-container .q-toggle {
+    margin-bottom: 0;
+    font-size: 0.75rem;
+  }
+
+  .controls-container .q-toggle :deep(.q-toggle__label) {
+    font-size: 0.75rem;
   }
 
   .overlay-content {

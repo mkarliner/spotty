@@ -135,10 +135,15 @@ export default {
 /* Mobile */
 @media (max-width: 599px) {
   .mqtt-status {
-    top: 110px;
+    top: 150px;
     left: 5px;
-    font-size: 0.75rem;
-    padding: 6px 10px;
+    font-size: 0.7rem;
+    padding: 5px 8px;
+    gap: 6px;
+  }
+
+  .status-text {
+    font-size: 0.7rem;
   }
 }
 
