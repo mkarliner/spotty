@@ -1,5 +1,25 @@
 <template>
-  <div>
+  <div class="map-wrapper">
+    <!-- Empty state overlay -->
+    <div v-if="showEmptyState" class="empty-state-overlay">
+      <EmptyState
+        icon="satellite_alt"
+        iconColor="primary"
+        :title="emptyStateTitle"
+        :message="emptyStateMessage"
+      >
+        <template #action>
+          <q-btn
+            v-if="store.mqtt_status === 'disconnected' || store.mqtt_status === 'error'"
+            color="primary"
+            label="Check Settings"
+            to="/settings"
+            icon="settings"
+          />
+        </template>
+      </EmptyState>
+    </div>
+
     <ol-map
       :loadTilesWhileAnimating="true"
       :loadTilesWhileInteracting="true"
@@ -163,14 +183,13 @@
 <script>
 import { useMQTT } from "mqtt-vue-hook";
 import { locatorToLatLng } from "qth-locator";
-import { computed } from "vue";
+import { computed, ref, provide } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
 import proj4 from "proj4";
 const mqttHook = useMQTT();
-
-import { ref, provide } from "vue";
 import ReportPoint from "src/components/ReportPoint.vue";
+import EmptyState from "src/components/EmptyState.vue";
 import VueScreenSizeMixin from "vue-screen-size";
 // import ReportPoint from "./ReportPoint.vue";
 // import OpenLayersMap from 'vue3-openlayers'
@@ -260,8 +279,52 @@ export default {
       selectedSpot.value = null;
     };
 
+    // Empty state logic
+    const spotCount = computed(() => Object.keys(store.report_points || {}).length);
+
+    const showEmptyState = computed(() => {
+      // Show empty state if connected but no spots after 10 seconds
+      if (store.mqtt_status === 'connected' && spotCount.value === 0) {
+        const timeSinceLastSpot = (Date.now() - store.last_spot) / 1000;
+        return timeSinceLastSpot > 10;
+      }
+      // Show if not connected
+      return store.mqtt_status === 'disconnected' || store.mqtt_status === 'error';
+    });
+
+    const emptyStateTitle = computed(() => {
+      if (store.mqtt_status === 'disconnected') {
+        return 'Not Connected';
+      } else if (store.mqtt_status === 'error') {
+        return 'Connection Error';
+      } else if (store.mqtt_status === 'connecting') {
+        return 'Connecting...';
+      } else if (spotCount.value === 0) {
+        return 'No Spots Yet';
+      }
+      return 'No Data';
+    });
+
+    const emptyStateMessage = computed(() => {
+      if (store.mqtt_status === 'disconnected') {
+        return 'MQTT connection is not established. Check your settings and network connection.';
+      } else if (store.mqtt_status === 'error') {
+        return store.mqtt_error || 'Unable to connect to MQTT broker. Please check your settings.';
+      } else if (store.mqtt_status === 'connecting') {
+        return 'Establishing connection to MQTT broker...';
+      } else if (!store.track_callsign && !store.track_grid) {
+        return 'Enable callsign or grid tracking in Settings to see spots on the map.';
+      } else if (spotCount.value === 0) {
+        return `Waiting for signal reports matching ${store.track_callsign ? store.callsign : ''}${store.track_callsign && store.track_grid ? ' and ' : ''}${store.track_grid ? store.grid : ''}. This may take a few moments.`;
+      }
+      return 'No spots available to display.';
+    });
+
     return {
       store,
+      showEmptyState,
+      emptyStateTitle,
+      emptyStateMessage,
       center,
       projection,
       zoom,
@@ -372,15 +435,39 @@ export default {
   },
   components: {
     ReportPoint,
+    EmptyState,
   },
 };
 </script>
 
 <style scoped>
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
 .map-container {
   width: 100%;
   height: 100vh;
   position: relative;
+}
+
+.empty-state-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.body--dark .empty-state-overlay {
+  background: rgba(30, 30, 30, 0.95);
 }
 
 .map-controls {

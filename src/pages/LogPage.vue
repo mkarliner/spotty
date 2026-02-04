@@ -1,7 +1,34 @@
 <template>
   <q-page class="log-page">
     <div class="q-pa-md log-content">
-      <q-markup-table>
+      <EmptyState
+        v-if="spotCount === 0"
+        icon="list_alt"
+        iconColor="primary"
+        title="No Spots Logged"
+        :message="emptyMessage"
+      >
+        <template #action>
+          <q-btn
+            color="primary"
+            label="Configure Tracking"
+            to="/settings"
+            icon="settings"
+          />
+        </template>
+      </EmptyState>
+
+      <q-markup-table v-else>
+        <thead>
+          <tr>
+            <th>Band</th>
+            <th>Country</th>
+            <th>RX Call</th>
+            <th>RX Grid</th>
+            <th>TX Call</th>
+            <th>TX Grid</th>
+          </tr>
+        </thead>
         <tbody>
           <tr
             v-for="p in this.store.report_points"
@@ -26,18 +53,38 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
+import EmptyState from "src/components/EmptyState.vue";
 
 export default {
+  components: {
+    EmptyState,
+  },
   setup() {
     const store = useSettingsStore();
-    console.log("Log setup");
+
+    const spotCount = computed(() => Object.keys(store.report_points || {}).length);
+
+    const emptyMessage = computed(() => {
+      if (store.mqtt_status !== 'connected') {
+        return 'MQTT connection not established. Check Settings to configure your connection.';
+      }
+      if (!store.track_callsign && !store.track_grid) {
+        return 'Enable callsign or grid tracking in Settings to see signal reports.';
+      }
+      return `Waiting for signal reports matching ${store.track_callsign ? store.callsign : ''}${store.track_callsign && store.track_grid ? ' and ' : ''}${store.track_grid ? store.grid : ''}. Reports will appear here as they arrive.`;
+    });
+
     const styleObject = {
       "background-color": "pink",
     };
+
     return {
       store,
+      spotCount,
+      emptyMessage,
       styleObject,
     };
   },
