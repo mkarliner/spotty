@@ -31,7 +31,13 @@ h4 {
 
 // Global responsive improvements
 .q-page-container {
-  padding-top: 0 !important;
+  padding: 0 !important;
+}
+
+// Remove padding from pages that need full height
+.q-page {
+  padding: 0;
+  margin: 0;
 }
 
 // Mobile-first responsive design

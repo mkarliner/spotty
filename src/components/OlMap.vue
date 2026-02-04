@@ -444,13 +444,18 @@ export default {
 .map-wrapper {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 120px - 90px); /* Subtract header (120px) and footer (~90px) */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .map-container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 .empty-state-overlay {
@@ -613,6 +618,14 @@ export default {
 
 /* Mobile optimizations */
 @media (max-width: 599px) {
+  .map-wrapper {
+    height: calc(100vh - 140px - 90px); /* Mobile header is taller */
+  }
+
+  .map-container {
+    height: calc(100vh - 140px - 90px); /* Mobile header is taller */
+  }
+
   .map-controls {
     top: 90px;
     right: 5px;
