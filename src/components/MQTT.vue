@@ -10,14 +10,17 @@ import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
 import { iso1A2Code } from "@rapideditor/country-coder";
 import { useCountryNames } from "./CountryNames";
+import { createLogger } from "src/utils/logger";
+
 const mqttHook = useMQTT();
+const logger = createLogger('MQTT');
 
 export default {
   // name: 'ComponentName',
   setup() {
-    console.log("MQTT active");
+    logger.debug("MQTT component active");
     const store = useSettingsStore();
-    console.log("STORE: ", store);
+    logger.debug("Store initialized:", store.callsign, store.grid);
 
     const { grid, callsign, track_callsign, track_grid } = storeToRefs(store);
 
@@ -60,13 +63,13 @@ export default {
     const registeredTopics = ref(new Set());
 
     watch(topicss, (newTopics, oldTopics) => {
-      console.log("WAT ", newTopics, oldTopics);
+      logger.debug("Topics changed:", { new: newTopics, old: oldTopics });
 
       // Unsubscribe from old topics
       if (oldTopics) {
         for (const t in oldTopics) {
           mqttHook.unSubscribe(oldTopics[t]);
-          console.log("UNSUB : ", oldTopics[t]);
+          logger.info("Unsubscribed from topic:", oldTopics[t]);
         }
       }
 
@@ -89,7 +92,7 @@ export default {
         }
 
         mqttHook.subscribe(topicString);
-        console.log("SUB: ", topicString);
+        logger.info("Subscribed to topic:", topicString);
         registeredTopics.value.add(topicString);
 
         mqttHook.registerEvent(topicString, (actual_topic, message) => {
@@ -98,7 +101,7 @@ export default {
 
             // Validate required fields
             if (!rep.rl || !rep.sl || !rep.sq) {
-              console.warn("Invalid message, missing required fields:", rep);
+              logger.warn("Invalid message, missing required fields:", rep);
               return;
             }
 
@@ -108,7 +111,7 @@ export default {
             const tx_point = [senderLon, senderLat];
 
             if (store.report_points.hasOwnProperty(rep.sq)) {
-              console.log("ALERT, Duplicate");
+              logger.debug("Duplicate message received, sequence:", rep.sq);
             } else {
               store.last_spot = parseInt(rep.t) * 1000;
               store.report_points[rep.sq] = {
@@ -124,7 +127,7 @@ export default {
               };
             }
           } catch (error) {
-            console.error("Error processing MQTT message:", error, message.toString());
+            logger.error("Error processing MQTT message:", error, message.toString());
           }
         });
       }
@@ -139,13 +142,13 @@ export default {
 
       if (isConnected && !wasConnected) {
         // Just connected
-        console.log("MQTT connected");
+        logger.info("MQTT connection established");
         store.mqtt_status = 'connected';
         store.mqtt_error = null;
         wasConnected = true;
       } else if (!isConnected && wasConnected) {
         // Just disconnected
-        console.log("MQTT disconnected");
+        logger.warn("MQTT connection lost");
         store.mqtt_status = 'disconnected';
         wasConnected = false;
       } else if (!isConnected && store.mqtt_status === 'connecting') {
@@ -159,7 +162,7 @@ export default {
     };
 
     const setupConnectionMonitoring = () => {
-      console.log("Setting up MQTT connection monitoring");
+      logger.debug("Setting up MQTT connection monitoring");
 
       // Initial check
       checkConnectionStatus();
@@ -171,7 +174,7 @@ export default {
     let cleanupIntervalId = null;
 
     onMounted(() => {
-      console.log("MQTT mounted", store);
+      logger.debug("MQTT component mounted");
 
       // Set initial status
       store.mqtt_status = 'connecting';
@@ -190,7 +193,7 @@ export default {
     });
 
     onUnmounted(() => {
-      console.log("MQTT unmounted, cleaning up");
+      logger.debug("MQTT component unmounted, cleaning up");
 
       // Clear the cleanup interval
       if (cleanupIntervalId !== null) {
@@ -206,7 +209,7 @@ export default {
       const topics = topicss.value;
       for (const t in topics) {
         mqttHook.unSubscribe(topics[t]);
-        console.log("CLEANUP UNSUB: ", topics[t]);
+        logger.info("Cleanup: unsubscribed from topic:", topics[t]);
       }
     });
 
