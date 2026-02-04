@@ -9,13 +9,14 @@ import mqttVueHook from 'mqtt-vue-hook'
 
 
 export default boot(async ({ app, router }) => {
-
-
-  // app.mount("#app");
+  // MQTT configuration with reconnection support
   app.use(mqttVueHook, `${protocol}://${host}:${port}`, {
     clean: false,
     keepalive: 60,
     clientId: `mqtt_client_${Math.random().toString(16).substring(2, 10)}`,
     connectTimeout: 4000,
-})
+    // Automatic reconnection settings
+    reconnectPeriod: 1000, // Start with 1 second
+    resubscribe: true, // Automatically resubscribe on reconnect
+  })
 });

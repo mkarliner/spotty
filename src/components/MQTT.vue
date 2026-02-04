@@ -130,10 +130,54 @@ export default {
       }
     }
 
+    // Monitor MQTT connection status using polling
+    let connectionCheckInterval = null;
+    let wasConnected = false;
+
+    const checkConnectionStatus = () => {
+      const isConnected = mqttHook.isConnected();
+
+      if (isConnected && !wasConnected) {
+        // Just connected
+        console.log("MQTT connected");
+        store.mqtt_status = 'connected';
+        store.mqtt_error = null;
+        wasConnected = true;
+      } else if (!isConnected && wasConnected) {
+        // Just disconnected
+        console.log("MQTT disconnected");
+        store.mqtt_status = 'disconnected';
+        wasConnected = false;
+      } else if (!isConnected && store.mqtt_status === 'connecting') {
+        // Still connecting
+        store.mqtt_status = 'connecting';
+      } else if (isConnected) {
+        // Stay connected
+        store.mqtt_status = 'connected';
+        store.mqtt_error = null;
+      }
+    };
+
+    const setupConnectionMonitoring = () => {
+      console.log("Setting up MQTT connection monitoring");
+
+      // Initial check
+      checkConnectionStatus();
+
+      // Poll connection status every 2 seconds
+      connectionCheckInterval = setInterval(checkConnectionStatus, 2000);
+    };
+
     let cleanupIntervalId = null;
 
     onMounted(() => {
       console.log("MQTT mounted", store);
+
+      // Set initial status
+      store.mqtt_status = 'connecting';
+
+      // Setup connection monitoring
+      setupConnectionMonitoring();
 
       cleanupIntervalId = setInterval(function () {
         for (let r in store.report_points) {
@@ -148,9 +192,14 @@ export default {
     onUnmounted(() => {
       console.log("MQTT unmounted, cleaning up");
 
-      // Clear the interval
+      // Clear the cleanup interval
       if (cleanupIntervalId !== null) {
         clearInterval(cleanupIntervalId);
+      }
+
+      // Clear the connection check interval
+      if (connectionCheckInterval !== null) {
+        clearInterval(connectionCheckInterval);
       }
 
       // Unsubscribe from all topics

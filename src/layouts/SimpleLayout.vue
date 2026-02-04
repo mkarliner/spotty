@@ -9,6 +9,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <MQTT></MQTT>
+    <MqttStatus />
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title class="toolbar">
@@ -126,6 +127,7 @@ import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useQuasar } from "quasar";
 import MQTT from "src/components/MQTT.vue";
+import MqttStatus from "src/components/MqttStatus.vue";
 
 export default defineComponent({
   setup() {
@@ -161,11 +163,17 @@ export default defineComponent({
   },
   components: {
     MQTT,
+    MqttStatus,
   },
 });
 </script>
 
 <style scoped>
+/* Ensure header has enough height for toolbar and tabs */
+.q-header {
+  min-height: 120px;
+}
+
 .toolbar {
   font-size: 1rem;
 }

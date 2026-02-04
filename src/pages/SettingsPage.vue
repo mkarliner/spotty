@@ -7,6 +7,15 @@
         <q-separator class="q-my-md" />
         <div class="text-h6 q-mb-md">Appearance</div>
         <q-checkbox v-model="store.dark_mode" label="Dark mode" />
+        <q-checkbox
+          v-model="store.show_mqtt_status_always"
+          label="Always show connection status"
+        >
+          <q-tooltip>
+            When enabled, shows MQTT connection status at all times.
+            When disabled, only shows on connection issues.
+          </q-tooltip>
+        </q-checkbox>
 
         <q-separator class="q-my-md" />
         <div class="text-h6 q-mb-md">Tracking</div>
@@ -14,24 +23,21 @@
         <q-input
           label="Callsign"
           type="text"
-          mask="NNNNNNNN"
-          :model-value="store.callsign"
-          @input="
-            (event) => {
-              callsign = event.target.value;
-              console.log('ddd');
-            }
-          "
-          @update:modelValue="(e) => (callsign = e)"
+          v-model="callsign"
+          :rules="[validateCallsignRule]"
+          hint="3-12 alphanumeric characters (e.g., W1ABC, G4XYZ)"
+          lazy-rules
+          @blur="callsign = normalizeCallsign(callsign)"
         />
         <q-checkbox v-model="store.track_grid" label="Track grid" />
-        <!-- <q-checkbox v-model="store.show_grid" label="Show grid" /> -->
         <q-input
           label="Grid"
           type="text"
-          mask="AA##"
-          :model-value="store.grid"
-          @update:modelValue="(e) => (grid = e)"
+          v-model="grid"
+          :rules="[validateGridRule]"
+          hint="4, 6, or 8 characters (e.g., IO91, IO91vl)"
+          lazy-rules
+          @blur="grid = normalizeGridSquare(grid)"
         />
 
         <!-- <q-form @keydown.enter.prevent="changeTopic">
@@ -60,6 +66,12 @@ import { computed } from "vue";
 import { useSettingsStore } from "stores/settings";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import {
+  validateCallsign,
+  validateGridSquare,
+  normalizeCallsign,
+  normalizeGridSquare
+} from "src/utils/validation";
 
 export default defineComponent({
   name: "SettingsPage",
@@ -68,26 +80,53 @@ export default defineComponent({
     const { gridw, callsignw } = storeToRefs(useSettingsStore);
     const callsign = ref(store.callsign);
     const grid = ref(store.grid);
-    // const ttl = 60
     const mode = "callsign";
-    // report_ttl = computed(() => store.report_ttl;
+
+    // Validation rules for Quasar inputs
+    const validateCallsignRule = (val) => {
+      const result = validateCallsign(val);
+      return result === true || result;
+    };
+
+    const validateGridRule = (val) => {
+      const result = validateGridSquare(val);
+      return result === true || result;
+    };
+
     return {
       store,
       callsign,
       callsignw,
       gridw,
       grid,
-      // ttl,
       mode,
       onSubmit,
-      // report_ttl
+      validateCallsignRule,
+      validateGridRule,
+      normalizeCallsign,
+      normalizeGridSquare,
     };
 
     function onSubmit(e) {
-      store.grid = grid.value;
-      store.callsign = callsign.value;
-      // console.log("SUBMITTED", e, callsign.value, grid.value, store.grid);
-      // store.topic = [111];
+      // Normalize inputs before saving
+      const normalizedCallsign = normalizeCallsign(callsign.value);
+      const normalizedGrid = normalizeGridSquare(grid.value);
+
+      // Validate before saving
+      if (store.track_callsign && validateCallsign(normalizedCallsign) !== true) {
+        return;
+      }
+
+      if (store.track_grid && validateGridSquare(normalizedGrid) !== true) {
+        return;
+      }
+
+      // Save to store
+      store.callsign = normalizedCallsign;
+      store.grid = normalizedGrid;
+
+      // Show success notification
+      console.log("Settings saved:", { callsign: normalizedCallsign, grid: normalizedGrid });
     }
   },
   mounted() {

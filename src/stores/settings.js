@@ -15,6 +15,9 @@ export const useSettingsStore = defineStore("settings", {
     show_grid: true,
     show_band_labels: false,
     dark_mode: false,
+    mqtt_status: 'disconnected', // 'connecting', 'connected', 'disconnected', 'reconnecting', 'error'
+    mqtt_error: null,
+    show_mqtt_status_always: true, // Show status always (true) or only on failure (false)
   }),
 
   persist: {
