@@ -48,6 +48,15 @@
           label="Time to Live"
           type="number"
           style="max-width: 200px"
+          hint="Seconds before spots are removed from map"
+        />
+        <q-input
+          v-model.number="store.latency_window_minutes"
+          label="Latency Window"
+          type="number"
+          style="max-width: 200px"
+          hint="Minutes to average latency over (shown in footer)"
+          :rules="[(val) => val > 0 || 'Must be greater than 0']"
         />
         <q-checkbox v-model="store.show_snr" label="Show SNR" />
         <div>

@@ -113,7 +113,11 @@ export default {
             if (store.report_points.hasOwnProperty(rep.sq)) {
               logger.debug("Duplicate message received, sequence:", rep.sq);
             } else {
-              store.last_spot = parseInt(rep.t) * 1000;
+              const spotGeneratedAt = parseInt(rep.t) * 1000;
+              const receivedAt = Date.now();
+              const latency = receivedAt - spotGeneratedAt;
+
+              store.last_spot = spotGeneratedAt;
               store.report_points[rep.sq] = {
                 topic: topicString,
                 topicKey: topicKey,
@@ -123,7 +127,8 @@ export default {
                 rx_coordinate: rx_point,
                 tx_coordinate: tx_point,
                 countryName: codeToCountryName(iso1A2Code(rx_point)),
-                timestamp: Date.now(),
+                timestamp: receivedAt,
+                latency: latency,
               };
             }
           } catch (error) {

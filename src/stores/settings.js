@@ -18,6 +18,7 @@ export const useSettingsStore = defineStore("settings", {
     mqtt_status: 'disconnected', // 'connecting', 'connected', 'disconnected', 'reconnecting', 'error'
     mqtt_error: null,
     show_mqtt_status_always: true, // Show status always (true) or only on failure (false)
+    latency_window_minutes: 5, // Time window for average latency calculation (in minutes)
   }),
 
   persist: {
@@ -35,6 +36,30 @@ export const useSettingsStore = defineStore("settings", {
     getReportPoints(state) {
       console.log("sss");
       return state.report_points;
+    },
+
+    averageLatency(state) {
+      const now = Date.now();
+      const windowMs = state.latency_window_minutes * 60 * 1000;
+      const cutoffTime = now - windowMs;
+
+      const recentSpots = Object.values(state.report_points).filter(
+        (spot) => spot.timestamp >= cutoffTime && spot.latency !== undefined
+      );
+
+      if (recentSpots.length === 0) {
+        return null;
+      }
+
+      const totalLatency = recentSpots.reduce(
+        (sum, spot) => sum + spot.latency,
+        0
+      );
+      return Math.round(totalLatency / recentSpots.length / 1000); // Convert to seconds
+    },
+
+    spotCount(state) {
+      return Object.keys(state.report_points || {}).length;
     },
   },
 

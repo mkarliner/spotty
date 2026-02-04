@@ -101,16 +101,16 @@
             <div class="footer-info">
               <q-icon name="schedule" size="xs" class="q-mr-xs" />
               <span class="text-caption">
-                Latency:
+                Avg Latency ({{ store.latency_window_minutes }}min):
                 <span :class="latencyColor">
-                  {{ Math.round((Date.now() - store.last_spot) / 1000) }}s
+                  {{ latencyDisplay }}
                 </span>
               </span>
             </div>
             <div class="footer-stats gt-xs">
               <q-icon name="radio" size="xs" class="q-mr-xs" />
               <span class="text-caption">
-                {{ Object.keys(store.report_points || {}).length }} spots
+                {{ store.spotCount }} spots
               </span>
             </div>
           </div>
@@ -136,10 +136,19 @@ export default defineComponent({
     const count = computed(() => store.topic);
 
     const latencyColor = computed(() => {
-      const latency = Math.round((Date.now() - store.last_spot) / 1000);
+      const latency = store.averageLatency;
+      if (latency === null) return "text-grey";
       if (latency < 30) return "text-green";
       if (latency < 60) return "text-yellow";
       return "text-red";
+    });
+
+    const latencyDisplay = computed(() => {
+      const latency = store.averageLatency;
+      if (latency === null) {
+        return "N/A";
+      }
+      return `${latency}s`;
     });
 
     // Watch for dark mode changes and apply to Quasar
@@ -158,6 +167,7 @@ export default defineComponent({
     return {
       store,
       latencyColor,
+      latencyDisplay,
       toggleDarkMode,
     };
   },
@@ -214,5 +224,8 @@ export default defineComponent({
 }
 .text-red {
   color: #f44336 !important;
+}
+.text-grey {
+  color: #9e9e9e !important;
 }
 </style>
