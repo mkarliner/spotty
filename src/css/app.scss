@@ -1,19 +1,32 @@
 // app global css in SCSS form
 
+// ============================================
+// TYPOGRAPHY SYSTEM - Command Center Retro-Future
+// ============================================
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
 // Typography improvements
 h2 {
+  font-family: 'IBM Plex Sans', sans-serif;
   font-size: 2rem;
   line-height: 1.2;
+  font-weight: 600;
 }
 
 h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
   font-size: 1.5rem;
   line-height: 1.2;
+  font-weight: 600;
 }
 
 h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
   font-size: 1.2rem;
   line-height: 1.2;
+  font-weight: 600;
 }
 
 // Global responsive improvements
@@ -62,8 +75,52 @@ h4 {
   transition: all 0.2s ease-in-out;
 }
 
-// Ham radio themed colors
+// ============================================
+// COLOR SYSTEM - Radio Band Spectrum Palette
+// ============================================
 :root {
+  // Typography Font Variables
+  --font-display: 'Orbitron', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'IBM Plex Sans', sans-serif;
+
+  // Base Layers - Light Mode
+  --color-void: #f8fafc;
+  --color-panel: #ffffff;
+  --color-surface: #f1f5f9;
+  --color-border: #e2e8f0;
+
+  // Accent System - Signal Strength Colors
+  --color-signal-strong: #10b981;
+  --color-signal-medium: #f59e0b;
+  --color-signal-weak: #ef4444;
+  --color-signal-critical: #dc2626;
+
+  // Band-Specific Colors - Amateur Radio Spectrum
+  --band-160m: #a855f7;
+  --band-80m: #ec4899;
+  --band-60m: #3b82f6;
+  --band-40m: #06b6d4;
+  --band-30m: #10b981;
+  --band-20m: #84cc16;
+  --band-17m: #facc15;
+  --band-15m: #f97316;
+  --band-12m: #ef4444;
+  --band-10m: #f43f5e;
+  --band-6m: #d946ef;
+  --band-2m: #8b5cf6;
+
+  // Typography Colors - Light Mode
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-accent: #10b981;
+
+  // Glow Effects
+  --glow-signal: 0 0 20px rgba(16, 185, 129, 0.3);
+  --glow-band: 0 0 15px currentColor;
+
+  // Legacy Quasar Compatibility
   --ham-primary: #1976d2;
   --ham-secondary: #26a69a;
   --ham-accent: #9c27b0;
@@ -73,55 +130,123 @@ h4 {
   --ham-warning: #f2c037;
 }
 
-// Dark mode enhancements
+// ============================================
+// DARK MODE - Command Center Aesthetic
+// ============================================
 .body--dark {
-  // Custom dark mode colors for ham radio theme
+  // Base Layers - Dark Mode
+  --color-void: #0a0e14;
+  --color-panel: #151922;
+  --color-surface: #1e2531;
+  --color-border: #2d3648;
+
+  // Accent System - Enhanced for Dark
+  --color-signal-strong: #00ff88;
+  --color-signal-medium: #ffd700;
+  --color-signal-weak: #ff6b4a;
+  --color-signal-critical: #ff3366;
+
+  // Typography Colors - Dark Mode
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-accent: #00ff88;
+
+  // Glow Effects - Enhanced for Dark
+  --glow-signal: 0 0 20px rgba(0, 255, 136, 0.4);
+
+  // Legacy Quasar Compatibility
   --ham-primary: #42a5f5;
   --ham-secondary: #4db6ac;
   --ham-accent: #ba68c8;
 
   // Enhanced table styling for dark mode
   .q-markup-table {
-    background: #2d2d2d;
+    background: var(--color-panel);
 
     tbody tr {
-      border-bottom: 1px solid #444;
+      border-bottom: 1px solid var(--color-border);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 255, 136, 0.05);
       }
     }
 
     td {
-      color: #ffffff;
-      border-color: #444;
+      color: var(--text-primary);
+      border-color: var(--color-border);
     }
   }
 
   // Dark mode card improvements
   .q-card {
-    background: #2d2d2d;
-    border: 1px solid #444;
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
   }
 
   // Form improvements in dark mode
   .q-field--outlined .q-field__control {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-surface);
+    border-color: var(--color-border);
   }
 
   // Better contrast for text
   .text-caption {
-    opacity: 0.8;
+    opacity: 0.9;
+    color: var(--text-secondary);
   }
 
   // Status indicators for dark mode
   .text-green {
-    color: #66bb6a !important;
+    color: var(--color-signal-strong) !important;
   }
   .text-yellow {
-    color: #ffb74d !important;
+    color: var(--color-signal-medium) !important;
   }
   .text-red {
-    color: #ef5350 !important;
+    color: var(--color-signal-weak) !important;
+  }
+}
+
+// ============================================
+// GLOBAL ANIMATIONS & KEYFRAMES
+// ============================================
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: brightness(1);
+    opacity: 1;
+  }
+  50% {
+    filter: brightness(1.2);
+    opacity: 0.9;
+  }
+}
+
+@keyframes tab-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes alert-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
