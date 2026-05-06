@@ -67,6 +67,25 @@
           :rules="[(val) => val > 0 || 'Must be greater than 0']"
         />
         <q-checkbox v-model="store.show_snr" label="Show SNR" />
+
+        <q-separator class="q-my-md" />
+        <div class="text-h6 q-mb-md">Global Mode</div>
+        <q-checkbox v-model="store.global_mode" label="Enable global mode">
+          <q-tooltip>
+            Subscribe to a 1% sample of all PSKReporter traffic worldwide.
+            Grid spots are replaced by global spots; callsign spots remain visible.
+          </q-tooltip>
+        </q-checkbox>
+        <q-input
+          v-if="store.global_mode"
+          v-model.number="store.global_spot_cap"
+          label="Max global spots"
+          type="number"
+          style="max-width: 200px"
+          hint="Oldest spots are evicted when this limit is reached"
+          :rules="[(val) => val > 0 || 'Must be greater than 0']"
+        />
+
         <div>
           <q-btn label="OK" type="submit" color="primary" />
         </div>
