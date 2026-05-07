@@ -22,6 +22,7 @@ export const useSettingsStore = defineStore("settings", {
     global_mode: false,
     global_report_points: {},
     global_spot_cap: 500,
+    global_report_ttl: 120,
   }),
 
   persist: {

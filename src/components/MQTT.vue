@@ -255,7 +255,7 @@ export default {
         }
         for (let r in store.global_report_points) {
           let age = (Date.now() - store.global_report_points[r].timestamp) / 1000;
-          if (age > store.report_ttl) {
+          if (age > store.global_report_ttl) {
             store.deleteGlobalPoint(store.global_report_points[r].sequenceNumber);
           }
         }

@@ -71,11 +71,11 @@
         <q-separator class="q-my-md" />
         <div class="text-h6 q-mb-md">Global Mode</div>
         <q-input
-          v-model.number="store.global_spot_cap"
-          label="Max global spots"
+          v-model.number="store.global_report_ttl"
+          label="Global spot TTL"
           type="number"
           style="max-width: 200px"
-          hint="Oldest spots are evicted when this limit is reached"
+          hint="Seconds before global spots are removed from map"
           :rules="[(val) => val > 0 || 'Must be greater than 0']"
         />
 
