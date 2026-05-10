@@ -32,6 +32,9 @@ Small spots are those heard by the specified location/callsign.
 Large spots are tranmissions from the location.
 Teardrop markers are spots for transmissions from the specified callsign.
 
+#### Modes
+There are two modes for the map view, global and grid. Global view shows a 1% sample of all spots, while grid view shows all spots for the specified grid/callsign
+
 ### Log View
 There is also a 'log' view which shows a scrolling list of spots.
 

@@ -24,25 +24,37 @@
             <div class="col-auto">
               <div class="row q-gutter-xs items-center">
                 <q-chip
-                  v-if="store.callsign"
-                  icon="radio"
-                  color="secondary"
+                  v-if="store.global_mode"
+                  icon="public"
+                  color="deep-orange"
                   text-color="white"
                   size="sm"
                   class="station-chip q-ma-none"
                 >
-                  {{ store.callsign }}
+                  Global
                 </q-chip>
-                <q-chip
-                  v-if="store.grid"
-                  icon="grid_on"
-                  color="secondary"
-                  text-color="white"
-                  size="sm"
-                  class="station-chip q-ma-none"
-                >
-                  {{ store.grid }}
-                </q-chip>
+                <template v-else>
+                  <q-chip
+                    v-if="store.callsign"
+                    icon="radio"
+                    color="secondary"
+                    text-color="white"
+                    size="sm"
+                    class="station-chip q-ma-none"
+                  >
+                    {{ store.callsign }}
+                  </q-chip>
+                  <q-chip
+                    v-if="store.grid"
+                    icon="grid_on"
+                    color="secondary"
+                    text-color="white"
+                    size="sm"
+                    class="station-chip q-ma-none"
+                  >
+                    {{ store.grid }}
+                  </q-chip>
+                </template>
                 <q-btn
                   flat
                   round
@@ -108,11 +120,12 @@
               </span>
             </div>
             <div class="spot-counter gt-xs">
-              <q-icon name="radio" size="xs" />
+              <q-icon name="public" size="xs" v-if="store.global_mode" />
+              <q-icon name="radio" size="xs" v-else />
               <span class="spot-counter-value">
-                {{ store.spotCount }}
+                {{ store.global_mode ? store.globalSpotCount : store.spotCount }}
               </span>
-              <span class="spot-counter-label">spots</span>
+              <span class="spot-counter-label">{{ store.global_mode ? 'global spots' : 'spots' }}</span>
             </div>
           </div>
         </q-toolbar-title>

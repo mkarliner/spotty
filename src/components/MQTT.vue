@@ -22,7 +22,9 @@ export default {
     const store = useSettingsStore();
     logger.debug("Store initialized:", store.callsign, store.grid);
 
-    const { grid, callsign, track_callsign, track_grid } = storeToRefs(store);
+    const { grid, callsign, track_callsign, track_grid, global_mode } = storeToRefs(store);
+
+    const GLOBAL_TOPIC = 'pskr/filter/v2raw_1pc/#';
 
     const topicss = computed(() => {
       let t = {};
@@ -138,6 +140,63 @@ export default {
       }
     }
 
+    function processGlobalMessage(message) {
+      try {
+        const rep = JSON.parse(message.toString());
+        if (!rep.rl || !rep.sl || !rep.sq) return;
+        if (store.global_report_points.hasOwnProperty(rep.sq)) return;
+
+        const [receiverLat, receiverLon] = locatorToLatLng(rep.rl);
+        const rx_point = [receiverLon, receiverLat];
+        const [senderLat, senderLon] = locatorToLatLng(rep.sl);
+        const tx_point = [senderLon, senderLat];
+
+        // Evict oldest entry when cap reached
+        const keys = Object.keys(store.global_report_points);
+        if (keys.length >= store.global_spot_cap) {
+          let oldestKey = keys[0];
+          let oldestTs = store.global_report_points[oldestKey].timestamp;
+          for (const k of keys) {
+            if (store.global_report_points[k].timestamp < oldestTs) {
+              oldestTs = store.global_report_points[k].timestamp;
+              oldestKey = k;
+            }
+          }
+          store.deleteGlobalPoint(oldestKey);
+        }
+
+        const receivedAt = Date.now();
+        store.global_report_points[rep.sq] = {
+          topic: GLOBAL_TOPIC,
+          topicKey: 'global',
+          report: rep,
+          sequenceNumber: rep.sq,
+          band: rep.b,
+          rx_coordinate: rx_point,
+          tx_coordinate: tx_point,
+          countryName: codeToCountryName(iso1A2Code(rx_point)),
+          timestamp: receivedAt,
+          latency: receivedAt - parseInt(rep.t) * 1000,
+        };
+      } catch (error) {
+        logger.error("Error processing global MQTT message:", error);
+      }
+    }
+
+    watch(global_mode, (enabled) => {
+      if (enabled) {
+        mqttHook.subscribe(GLOBAL_TOPIC);
+        logger.info("Subscribed to global topic:", GLOBAL_TOPIC);
+        mqttHook.registerEvent(GLOBAL_TOPIC, (actual_topic, message) => {
+          processGlobalMessage(message);
+        });
+      } else {
+        mqttHook.unSubscribe(GLOBAL_TOPIC);
+        logger.info("Unsubscribed from global topic");
+        store.global_report_points = {};
+      }
+    }, { immediate: true });
+
     // Monitor MQTT connection status using polling
     let connectionCheckInterval = null;
     let wasConnected = false;
@@ -194,6 +253,12 @@ export default {
             store.deletePoint(store.report_points[r].sequenceNumber);
           }
         }
+        for (let r in store.global_report_points) {
+          let age = (Date.now() - store.global_report_points[r].timestamp) / 1000;
+          if (age > store.global_report_ttl) {
+            store.deleteGlobalPoint(store.global_report_points[r].sequenceNumber);
+          }
+        }
       }, 10000);
     });
 
@@ -215,6 +280,10 @@ export default {
       for (const t in topics) {
         mqttHook.unSubscribe(topics[t]);
         logger.info("Cleanup: unsubscribed from topic:", topics[t]);
+      }
+      if (store.global_mode) {
+        mqttHook.unSubscribe(GLOBAL_TOPIC);
+        logger.info("Cleanup: unsubscribed from global topic");
       }
     });
 

@@ -67,6 +67,18 @@
           :rules="[(val) => val > 0 || 'Must be greater than 0']"
         />
         <q-checkbox v-model="store.show_snr" label="Show SNR" />
+
+        <q-separator class="q-my-md" />
+        <div class="text-h6 q-mb-md">Global Mode</div>
+        <q-input
+          v-model.number="store.global_report_ttl"
+          label="Global spot TTL"
+          type="number"
+          style="max-width: 200px"
+          hint="Seconds before global spots are removed from map"
+          :rules="[(val) => val > 0 || 'Must be greater than 0']"
+        />
+
         <div>
           <q-btn label="OK" type="submit" color="primary" />
         </div>
