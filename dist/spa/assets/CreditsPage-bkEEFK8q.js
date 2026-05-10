@@ -1,4 +1,4 @@
-import{M as t}from"./vue3-markdown-it.umd.min-CsRXe8Lr.js";import{_ as r,X as s,a as n,o as a,$ as c}from"./index-BUcyIGrT.js";const p={components:{Markdown:t},data(){return{source:`
+import{M as t}from"./vue3-markdown-it.umd.min-BB536XMS.js";import{_ as r,V as s,a as n,o as a,N as c}from"./index-CqwXFlI7.js";const p={components:{Markdown:t},data(){return{source:`
 
 
 ## Credits
