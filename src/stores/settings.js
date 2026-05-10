@@ -19,11 +19,16 @@ export const useSettingsStore = defineStore("settings", {
     mqtt_error: null,
     show_mqtt_status_always: true, // Show status always (true) or only on failure (false)
     latency_window_minutes: 5, // Time window for average latency calculation (in minutes)
+    global_mode: false,
+    global_report_points: {},
+    global_spot_cap: 500,
+    global_report_ttl: 120,
   }),
 
   persist: {
     afterRestore: (ctx) => {
       ctx.store.$state.report_points = {};
+      ctx.store.$state.global_report_points = {};
       console.log("REST: ", ctx.store.$state);
     },
   },
@@ -61,12 +66,19 @@ export const useSettingsStore = defineStore("settings", {
     spotCount(state) {
       return Object.keys(state.report_points || {}).length;
     },
+
+    globalSpotCount(state) {
+      return Object.keys(state.global_report_points || {}).length;
+    },
   },
 
   actions: {
     deletePoint(seq) {
-      //console.log("DETE: ", seq)
       delete this.report_points[seq.toString()];
+    },
+
+    deleteGlobalPoint(seq) {
+      delete this.global_report_points[seq.toString()];
     },
 
     setTopic(topic) {

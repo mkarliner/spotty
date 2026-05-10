@@ -32,12 +32,22 @@
             <div class="text-subtitle2 q-mb-sm text-center">Map Controls</div>
             <div class="controls-container">
               <q-toggle
+                v-model="store.global_mode"
+                label="Global mode"
+                size="md"
+                color="deep-orange"
+                class="q-mb-sm"
+                left-label
+              />
+              <q-toggle
                 v-model="store.show_grid"
                 label="Show grid spots"
                 size="md"
-                color="primary"
+                :color="store.global_mode ? 'grey' : 'primary'"
                 class="q-mb-sm"
                 left-label
+                :disable="store.global_mode"
+                :style="store.global_mode ? 'opacity: 0.4' : ''"
               />
               <q-toggle
                 v-model="store.show_band_labels"
@@ -126,7 +136,8 @@
       <ol-tile-layer>
         <ol-source-osm />
       </ol-tile-layer>
-      <ol-vector-layer>
+      <!-- Grid spots (hidden in global mode) -->
+      <ol-vector-layer v-if="!store.global_mode">
         <ol-source-vector>
           <ol-feature
             v-for="p in this.store.report_points"
@@ -149,6 +160,7 @@
         </ol-source-vector>
       </ol-vector-layer>
 
+      <!-- Callsign spots (always shown) -->
       <ol-vector-layer>
         <ol-source-vector>
           <ol-feature
@@ -160,6 +172,29 @@
                 p.report.sc == this.store.callsign ||
                 p.report.rc == this.store.callsign
               "
+              @delete="deleteRP"
+              :sequenceNumber="p.sequenceNumber"
+              :report="p.report"
+              :topic="p.topic"
+              :topicKey="p.topicKey"
+              :rx_coordinate="p.rx_coordinate"
+              :tx_coordinate="p.tx_coordinate"
+              :band="p.band"
+              :callsign="p.report.sc"
+              :owncallsign="this.store.callsign"
+            ></report-point>
+          </ol-feature>
+        </ol-source-vector>
+      </ol-vector-layer>
+
+      <!-- Global spots (shown when global mode is on) -->
+      <ol-vector-layer v-if="store.global_mode">
+        <ol-source-vector>
+          <ol-feature
+            v-for="p in this.store.global_report_points"
+            v-bind:key="p.sequenceNumber"
+          >
+            <report-point
               @delete="deleteRP"
               :sequenceNumber="p.sequenceNumber"
               :report="p.report"
@@ -281,15 +316,16 @@ export default {
 
     // Empty state logic
     const spotCount = computed(() => Object.keys(store.report_points || {}).length);
+    const globalSpotCount = computed(() => Object.keys(store.global_report_points || {}).length);
+    const visibleSpotCount = computed(() => store.global_mode ? globalSpotCount.value : spotCount.value);
 
     const showEmptyState = computed(() => {
-      // Show empty state if connected but no spots after 10 seconds
-      if (store.mqtt_status === 'connected' && spotCount.value === 0) {
+      if (store.mqtt_status === 'disconnected' || store.mqtt_status === 'error') return true;
+      if (store.mqtt_status === 'connected' && visibleSpotCount.value === 0) {
         const timeSinceLastSpot = (Date.now() - store.last_spot) / 1000;
         return timeSinceLastSpot > 10;
       }
-      // Show if not connected
-      return store.mqtt_status === 'disconnected' || store.mqtt_status === 'error';
+      return false;
     });
 
     const emptyStateTitle = computed(() => {
@@ -299,7 +335,7 @@ export default {
         return 'Connection Error';
       } else if (store.mqtt_status === 'connecting') {
         return 'Connecting...';
-      } else if (spotCount.value === 0) {
+      } else if (visibleSpotCount.value === 0) {
         return 'No Spots Yet';
       }
       return 'No Data';
@@ -312,9 +348,11 @@ export default {
         return store.mqtt_error || 'Unable to connect to MQTT broker. Please check your settings.';
       } else if (store.mqtt_status === 'connecting') {
         return 'Establishing connection to MQTT broker...';
+      } else if (store.global_mode && visibleSpotCount.value === 0) {
+        return 'Waiting for global signal reports. The 1% sample feed may take a moment to populate.';
       } else if (!store.track_callsign && !store.track_grid) {
         return 'Enable callsign or grid tracking in Settings to see spots on the map.';
-      } else if (spotCount.value === 0) {
+      } else if (visibleSpotCount.value === 0) {
         return `Waiting for signal reports matching ${store.track_callsign ? store.callsign : ''}${store.track_callsign && store.track_grid ? ' and ' : ''}${store.track_grid ? store.grid : ''}. This may take a few moments.`;
       }
       return 'No spots available to display.';
@@ -377,8 +415,10 @@ export default {
 
     featureSelected(event) {
       if (event.selected[0]) {
+        const seqno = event.selected[0].values_.seqno;
         const reportPoint =
-          this.store.report_points[event.selected[0].values_.seqno];
+          this.store.report_points[seqno] ||
+          this.store.global_report_points[seqno];
         if (reportPoint) {
           const rep = reportPoint.report;
           this.oposition = event.selected[0].values_.geometry.extent_;
