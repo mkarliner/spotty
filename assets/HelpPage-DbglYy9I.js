@@ -1,4 +1,4 @@
-import{M as s}from"./vue3-markdown-it.umd.min-CsRXe8Lr.js";import{_ as t,X as a,a as r,o as i,$ as n}from"./index-BUcyIGrT.js";const l={components:{Markdown:s},data(){return{source:`
+import{M as s}from"./vue3-markdown-it.umd.min-BB536XMS.js";import{_ as a,V as t,a as r,o as i,N as n}from"./index-CqwXFlI7.js";const l={components:{Markdown:s},data(){return{source:`
 
 
 ## Welcome to Spotty
@@ -16,6 +16,9 @@ Clicking out of the overlay dismisses it.
 Small spots are those heard by the specified location/callsign.
 Large spots are tranmissions from the location.
 Teardrop markers are spots for transmissions from the specified callsign.
+
+#### Modes
+There are two modes for the map view, global and grid. Global view shows a 1% sample of all spots, while grid view shows all spots for the specified grid/callsign
 
 ### Log View
 There is also a 'log' view which shows a scrolling list of spots.
@@ -36,4 +39,4 @@ How long a spot is shown after first being reported. The default is 60 seconds.
 
 
 
-      `}}},c={class:"txtbody"};function d(p,h,f,g,e,m){const o=a("Markdown");return i(),r("div",c,[n(o,{source:e.source},null,8,["source"])])}const _=t(l,[["render",d],["__scopeId","data-v-8571fa23"]]);export{_ as default};
+      `}}},c={class:"txtbody"};function d(p,h,g,f,e,m){const o=t("Markdown");return i(),r("div",c,[n(o,{source:e.source},null,8,["source"])])}const u=a(l,[["render",d],["__scopeId","data-v-c66a3ceb"]]);export{u as default};
